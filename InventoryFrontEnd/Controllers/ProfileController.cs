@@ -1,0 +1,29 @@
+﻿using System;
+using MySql.Data.MySqlClient;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.IO;
+using System.Configuration;
+
+namespace InventoryInterface.Controllers
+{
+    
+    public class ProfileController : Controller
+    {
+        // GET: Profile
+        public ActionResult Index()
+        {
+            if (User.Identity.IsAuthenticated == false)
+            {
+                return RedirectToAction("", "login");
+            }
+            else
+            {
+                return View();
+            }
+        }
+
+    }
+}

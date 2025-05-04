@@ -1,0 +1,111 @@
+﻿@{
+    ViewBag.Title = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section style="background-color: #f8f9fa;">
+    <div class="container py-5">
+        <div class="row">
+            <!-- Left column -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body text-center">
+                        <form id="profilePictureForm" enctype="multipart/form-data">
+                            <div class="position-relative d-inline-block">
+                                <img id="profileImage"
+                                     src="@((Session["ProfilePicture"] != null ? Session["ProfilePicture"].ToString() : Url.Content("~/Content/images.jpg")))"
+                                     alt="avatar"
+                                     class="rounded-circle img-fluid mb-3"
+                                     style="width: 150px; height: 150px; object-fit: cover;">
+
+                                <input type="file" id="profileImageUpload" name="profileImage" class="d-none" onchange="uploadProfilePicture(event);" />
+
+                                <label for="profileImageUpload" class="btn btn-outline-secondary btn-sm position-absolute bottom-0 start-50 translate-middle-x mb-2">
+                                    Change
+                                </label>
+
+                                <input type="hidden" id="userId" value="@Session["UserID"]" />
+                            </div>
+                        </form>
+
+                        <h5 class="my-3">@Session["FirstName"] @Session["LastName"]</h5>
+                        <p class="text-muted mb-1">@Session["UserRole"]</p>
+                        <p class="text-muted">@Session["CampusName"]</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right column -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="mb-4 text-primary">Profile Details</h5>
+
+                        <div class="row mb-3">
+                            <div class="col-sm-4 font-weight-bold">First Name:</div>
+                            <div class="col-sm-8">@Session["FirstName"]</div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-sm-4 font-weight-bold">Last Name:</div>
+                            <div class="col-sm-8">@Session["LastName"]</div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-sm-4 font-weight-bold">Role:</div>
+                            <div class="col-sm-8">@Session["UserRole"]</div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-sm-4 font-weight-bold">Campus:</div>
+                            <div class="col-sm-8">@Session["CampusName"]</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Part -->
+    <script>
+        function uploadProfilePicture(event) {
+            event.preventDefault(); // Stop normal form submit
+
+            var formData = new FormData();
+            var fileInput = document.getElementById('profileImageUpload');
+            var file = fileInput.files[0];
+            var userId = document.getElementById('userId').value;
+
+            if (!file) {
+                alert("Please select a file.");
+                return;
+            }
+
+            formData.append("ID", userId);        // First append ID
+            formData.append("profileImage", file); // Then append file
+
+            fetch("/API/LoginAccount/Upload/ProfilePicture", {
+                method: "POST",
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Upload failed!");
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    console.log(data);
+                    alert("Profile picture updated!");
+
+                    // Update the profile image immediately without page reload
+                    document.getElementById('profileImage').src = "/Uploads/ProfilePictures/" + file.name + "?" + new Date().getTime();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("Error uploading profile picture.");
+                });
+        }
+    </script>
+</section>

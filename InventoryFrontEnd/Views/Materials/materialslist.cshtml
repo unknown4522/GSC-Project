@@ -1,0 +1,224 @@
+﻿@using InventoryFrontEnd.Models;
+@model Modelall
+@{
+    ViewBag.Title = "ALL ROOMS";
+
+}
+<head>
+
+    <script src="~/JS Scripts/Materials functions.js"></script>
+
+</head>
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 mb-4">
+            <div class="card shadow rounded-4 h-100">
+                <div class="card-body">
+                    <h4 class="text-primary">@ViewBag.campus_name</h4>
+                    <h6 class="mb-3">Navigation</h6>
+
+                    <a href="@Url.Action("brandlist", "Inventory", new { campus_name = ViewBag.campus_name })"
+                       class="btn btn-outline-secondary mb-2 w-100 text-start">
+                        <i class="bi bi-tags me-1"></i> Brand List
+                    </a>
+                    <a href="@Url.Action("Item_list", "Inventory", new { campus_name = ViewBag.campus_name })"
+                       class="btn btn-outline-secondary mb-2 w-100 text-start">
+                        <i class="bi bi-tags me-1"></i> Item List
+                    </a>
+                    <a href="@Url.Action("materialslist", "Materials", new { campus_name = ViewBag.campus_name })"
+                       class="btn btn-outline-secondary mb-3 w-100 text-start">
+                        <i class="bi bi-tags me-1"></i> Materials List
+                    </a>
+                    <a href="@Url.Action("itemlogs", "Inventory", new { campus_name = ViewBag.campus_name })"
+                       class="btn btn-outline-secondary mb-3 w-100 text-start">
+                        <i class="bi bi-tags me-1"></i> Item Logs
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10">
+            <div class="card shadow rounded-4">
+                <div class="card-body">
+                    <!-- Header -->
+                    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+                        <div>
+                            <h2 class="mb-1 text-primary">@ViewBag.campus_name</h2>
+                            <h4 class="mb-0">Materials List</h4>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped table-bordered align-middle text-center">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Quantity</th>
+                                    <th>Date Received</th>
+                                    <th>Unit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.AllMaterials.OrderBy(x => x.Material_name))
+                                {
+                                    <tr class="clickable-row" role="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#detailsModal"
+                                        data-id="@item.Material_ID"
+                                        data-name="@item.Material_name"
+                                        data-quantity="@item.Quantity"
+                                        data-receiveddate="@item.Received_date"
+                                        data-unit="@item.Unit"
+                                        data-datepurchased="@item.Date_Purchased"
+                                        data-requestby="@item.Request_by"
+                                        data-approveby="@item.Approve_by"
+                                        data-status="@item.Status"
+                                        data-supplier="@item.Supplier"
+                                        data-receivedby="@item.Received_By"
+                                        data-campusname="@item.Campus_name">
+                                        <td>@item.Material_ID</td>
+                                        <td>@item.Material_name</td>
+                                        <td>@item.Quantity</td>
+                                        <td>@item.Received_date</td>
+                                        <td>@item.Unit</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        <!-- Pagination -->
+                        <div class="d-flex justify-content-center mt-3">
+                            <nav>
+                                <ul class="pagination" id="pagination"></ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content rounded-4 shadow-lg border-0">
+
+            <!-- Modal Header -->
+            <div class="modal-header text-white rounded-bottom-4" style="background: linear-gradient(135deg, #007bff, #0056b3);">
+                <h1>Materials Details</h1>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body py-4 px-4 bg-light">
+                <div class="row g-4">
+                    <div class="col-sm-6">
+                        <h6 class="fw-bold text-muted">Date Purchased</h6>
+                        <p id="modalDatePurchased" class="mb-0 text-dark"></p>
+                    </div>
+                    <div class="col-sm-6">
+                        <h6 class="fw-bold text-muted">Request By</h6>
+                        <p id="modalRequestBy" class="mb-0 text-dark"></p>
+                    </div>
+                    <div class="col-sm-6">
+                        <h6 class="fw-bold text-muted">Approve By</h6>
+                        <p id="modalApproveBy" class="mb-0 text-dark"></p>
+                    </div>
+                    <div class="col-sm-6">
+                        <h6 class="fw-bold text-muted">Status</h6>
+                        <p id="modalStatus" class="mb-0 text-dark"></p>
+                    </div>
+                    <div class="col-sm-6">
+                        <h6 class="fw-bold text-muted">Supplier</h6>
+                        <p id="modalSupplier" class="mb-0 text-dark"></p>
+                    </div>
+                    <div class="col-sm-6">
+                        <h6 class="fw-bold text-muted">Received By</h6>
+                        <p id="modalReceivedBy" class="mb-0 text-dark"></p>
+                    </div>
+                    <div class="col-sm-6">
+                        <h6 class="fw-bold text-muted">Campus Name</h6>
+                        <p id="modalCampusName" class="mb-0 text-dark"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer text-white rounded-bottom-4" style="background: linear-gradient(135deg, #007bff, #0056b3);">
+                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle"></i> Close
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- ADD Modal -->
+
+<div class="modal fade add-item-modal" id="createroombtn" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-static">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h2 class="modal-title" id="exampleModalLabel">ADD NEW ROOM</h2>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row mb-3">
+                        <div class="col-12 col-md-6">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="add_room_name" name="add_room_name" placeholder=" " autocomplete="off" required />
+                                <label for="add_room_name" class="form-label">Room Name</label>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-floating mb-3">
+                                <select class="form-select" id="add_floor_level" name="add_floor_level" required>
+                                    <option value="" disabled selected hidden>Choose FLOOR LEVEL</option>
+                                    <option value="1ST FLOOR">1ST FLOOR</option>
+                                    <option value="2ND FLOOR">2ND FLOOR</option>
+                                    <option value="3RD FLOOR">3RD FLOOR</option>
+                                    <option value="4TH FLOOR">4TH FLOOR</option>
+                                    <option value="5TH FLOOR">5TH FLOOR</option>
+                                    <option value="ROOFTOP">ROOFTOP</option>
+                                </select>
+                                <label for="add_floor_level" class="form-label">Floor Level</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="add_room_description" name="add_room_description" placeholder=" " autocomplete="off" required />
+                                <label for="add_room_description" class="form-label">Room Description</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="visually-hidden">
+                        <input type="text" class="form-control" id="add_campus_name" value="@ViewBag.campus_name" name="add_campus_name" autocomplete="off" readonly />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer fixed-bottom text-center">
+                <button class="btn btn-success" id="addroombtn">ADD</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
