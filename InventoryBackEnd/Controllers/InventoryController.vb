@@ -761,48 +761,112 @@ Namespace Controllers
 
 
 
+
         'SHOW ALL ITEMS 
         <Route("Item/All", Name:="Get_item_list")>
         Public Function Get_item_list(ByVal Campus_name As String) As IHttpActionResult
-            Dim stats As New List(Of Item_list)()
+            Dim stats As List(Of Item_list) = New List(Of Item_list)
+            Dim itemCount As Integer = 0
 
             Using sqlConn As New MySqlConnection(ConfigurationManager.ConnectionStrings("constr").ConnectionString)
-                Try
-                    sqlConn.Open()
-
-                    Using msqlcom As New MySqlCommand("SELECT * FROM item_list WHERE Campus_name = @Campus_name", sqlConn)
-                        msqlcom.Parameters.AddWithValue("@Campus_name", Campus_name)
-
-                        Using dtReader As MySqlDataReader = msqlcom.ExecuteReader()
-                            If dtReader.HasRows Then
-                                While dtReader.Read()
-                                    Dim dataObj As New Item_list With {
-                                .ID = dtReader("ID").ToString(),
-                                .Item_name = dtReader("Item_name").ToString(),
-                                .Model = dtReader("Model").ToString(),
-                                .Brand = dtReader("Brand").ToString(),
-                                .Serial_number = dtReader("Serial_number").ToString(),
-                                .Item_type = dtReader("Item_type").ToString(),
-                                .Room_name = dtReader("Room_name").ToString(),
-                                .Item_status = dtReader("Item_status").ToString(),
-                                .Department = dtReader("Department").ToString(),
-                                .Date_now = dtReader("Date_now").ToString(),
-                                .Campus_name = dtReader("Campus_name").ToString()
-                            }
-                                    stats.Add(dataObj)
-                                End While
-
-                                Return Ok(stats)
-                            Else
-                                Return NotFound()
-                            End If
+                If sqlConn.State = ConnectionState.Closed Then
+                    Try
+                        sqlConn.Open()
+                        ' Count the number of rooms
+                        Using countCommand As New MySqlCommand("SELECT COUNT(*) FROM item_list WHERE Campus_name = @Campus_name", sqlConn)
+                            countCommand.Parameters.AddWithValue("@Campus_name", Campus_name)
+                            itemCount = Convert.ToInt32(countCommand.ExecuteScalar())
                         End Using
-                    End Using
-                Catch ex As Exception
-                    Return InternalServerError(ex)
-                End Try
+
+                        ' Retrieve the rooms
+                        Using msqlcom As New MySqlCommand("SELECT * FROM item_list WHERE Campus_name = @Campus_name", sqlConn)
+                            msqlcom.Parameters.AddWithValue("@Campus_name", Campus_name)
+                            Using dtReader As MySqlDataReader = msqlcom.ExecuteReader()
+                                If dtReader.HasRows Then
+                                    While dtReader.Read()
+                                        Dim dataObj As New Item_list
+                                        With dataObj
+                                            .ID = dtReader("ID").ToString()
+                                            .Item_name = dtReader("Item_name").ToString()
+                                            .Model = dtReader("Model").ToString()
+                                            .Brand = dtReader("Brand").ToString()
+                                            .Serial_number = dtReader("Serial_number").ToString()
+                                            .Item_type = dtReader("Item_type").ToString()
+                                            .Room_name = dtReader("Room_name").ToString()
+                                            .Item_status = dtReader("Item_status").ToString()
+                                            .Department = dtReader("Department").ToString()
+                                            .Date_now = dtReader("Date_now").ToString()
+                                            .Campus_name = dtReader("Campus_name").ToString()
+                                            .Counter = itemCount
+                                        End With
+                                        stats.Add(dataObj)
+                                    End While
+
+                                    Return Ok(stats)
+                                Else
+                                    Return NotFound()
+                                End If
+                            End Using
+                        End Using
+                    Catch ex As Exception
+                        Return InternalServerError(ex)
+                    End Try
+                Else
+                    Return InternalServerError()
+                End If
             End Using
         End Function
+
+
+
+        '<Route("Item/All", Name:="Get_item_list")>
+        'Public Function Get_item_list(ByVal Campus_name As String) As IHttpActionResult
+        '    Dim stats As New List(Of Item_list)()
+        '    Dim itemCount As Integer = 0
+
+        '    Using sqlConn As New MySqlConnection(ConfigurationManager.ConnectionStrings("constr").ConnectionString)
+        '        Try
+        '            sqlConn.Open()
+        '            ' Count the number of rooms
+        '            Using countCommand As New MySqlCommand("SELECT COUNT(*) FROM item_list WHERE Campus_name = @Campus_name", sqlConn)
+        '                countCommand.Parameters.AddWithValue("@Campus_name", Campus_name)
+        '                itemCount = Convert.ToInt32(countCommand.ExecuteScalar())
+        '            End Using
+
+        '            Using msqlcom As New MySqlCommand("SELECT * FROM item_list WHERE Campus_name = @Campus_name", sqlConn)
+        '                msqlcom.Parameters.AddWithValue("@Campus_name", Campus_name)
+
+        '                Using dtReader As MySqlDataReader = msqlcom.ExecuteReader()
+        '                    If dtReader.HasRows Then
+        '                        While dtReader.Read()
+        '                            Dim dataObj As New Item_list With {
+        '                        .ID = dtReader("ID").ToString(),
+        '                        .Item_name = dtReader("Item_name").ToString(),
+        '                        .Model = dtReader("Model").ToString(),
+        '                        .Brand = dtReader("Brand").ToString(),
+        '                        .Serial_number = dtReader("Serial_number").ToString(),
+        '                        .Item_type = dtReader("Item_type").ToString(),
+        '                        .Room_name = dtReader("Room_name").ToString(),
+        '                        .Item_status = dtReader("Item_status").ToString(),
+        '                        .Department = dtReader("Department").ToString(),
+        '                        .Date_now = dtReader("Date_now").ToString(),
+        '                        .Campus_name = dtReader("Campus_name").ToString(),
+        '                        .Counter = itemCount
+        '                    }
+        '                            stats.Add(dataObj)
+        '                        End While
+
+        '                        Return Ok(stats)
+        '                    Else
+        '                        Return NotFound()
+        '                    End If
+        '                End Using
+        '            End Using
+        '        Catch ex As Exception
+        '            Return InternalServerError(ex)
+        '        End Try
+        '    End Using
+        'End Function
 
         'ADD ITEMS
 
@@ -990,6 +1054,7 @@ Namespace Controllers
                                     While dtReader.Read()
                                         Dim dataObj As New Item_list()
                                         With dataObj
+                                            .ID = dtReader("ID").ToString()
                                             .Item_name = dtReader("Item_name").ToString()
                                             .Model = dtReader("Model").ToString()
                                             .Brand = dtReader("Brand").ToString()

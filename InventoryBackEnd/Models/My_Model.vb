@@ -41,6 +41,7 @@ Public Class Item_logs
     Public Property Item_type As String
     Public Property item_status As String
     Public Property Department As String
+    Public Property Counter As String
 End Class
 Public Class Item_list
     Public Property ID As String
@@ -54,6 +55,7 @@ Public Class Item_list
     Public Property Department As String
     Public Property Date_now As String
     Public Property Campus_name As String
+    Public Property Counter As String
 End Class
 Public Class Apparel_stock
     Public Property Apparel_ID As String
