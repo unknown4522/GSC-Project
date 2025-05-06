@@ -30,6 +30,7 @@
     });
 
 
+
     $(document).ready(function () {
         function compareDates(a, b) {
             return new Date(b) - new Date(a);
@@ -99,6 +100,46 @@
 
     document.getElementById("tableSearch").addEventListener("keyup", searchTable);
 
+
+    $(document).ready(function () {
+        var rowsPerPage = 10;
+        var rows = $('table tbody tr');
+        var pagination = $('#pagination');
+        var rowsCount = rows.length;
+        var pageCount = Math.ceil(rowsCount / rowsPerPage);
+
+        function displayRows(page) {
+            rows.hide();
+            var start = page * rowsPerPage;
+            rows.slice(start, start + rowsPerPage).show();
+        }
+
+        function setupPagination() {
+            pagination.empty();
+            for (var i = 0; i < pageCount; i++) {
+                pagination.append(
+                    `<li class="page-item"><a class="page-link" href="#">${i + 1}</a></li>`
+                );
+            }
+            pagination.find('li:first').addClass('active');
+        }
+
+        setupPagination();
+        displayRows(0);
+
+        pagination.on('click', 'li', function (e) {
+            e.preventDefault();
+            var index = $(this).index();
+            pagination.find('li').removeClass('active');
+            $(this).addClass('active');
+            displayRows(index);
+        });
+
+        // Click row redirect
+        $('.clickable-row').click(function () {
+            window.location = $(this).data('href');
+        });
+    });
 
     $(document).ready(function () {
         var rowsPerPage = 10;

@@ -23,6 +23,7 @@ namespace InventoryFrontEnd.Models
         public string Department { get; set; }
         public string Date_now { get; set; }
         public string Campus_name { get; set; }
+        public string Counter { get; set; }
     }
     public class Brand
     {
@@ -168,6 +169,6 @@ namespace InventoryFrontEnd.Models
         public IEnumerable<Appareltype_list> Allappareltype { get; set; }
         public IEnumerable<Apparel_logs> Allapparellogs_data { get; set; }
         public IEnumerable<Materials_list> AllMaterials { get; set; }
-
+        public IEnumerable<Items> Allitems { get; internal set; }
     }
 }

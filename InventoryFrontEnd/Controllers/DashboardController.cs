@@ -20,7 +20,12 @@ namespace InventoryFrontEnd.Controllers
         public ActionResult Index(string Campus_name)
         {
             Modelall mymodel = new Modelall();
+            var inventoryController = new InventoryController();
+            var result = inventoryController.Allrooms(Campus_name);
+            var itemcount = inventoryController.Allitems(Campus_name);
             ViewBag.Campus_name = Campus_name;
+            mymodel.Room_list = result;
+            mymodel.Allitems = itemcount;
             ViewBag.firstName = Session["FirstName"];
             ViewBag.LastName = Session["LastName"];
             ViewBag.campusName = Session["campusName"];

@@ -67,557 +67,617 @@
     </style>
 </div>
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <div>
-            <h1>@ViewBag.campus_name</h1>
-            <h4 class="text-muted">@ViewBag.room_name</h4>
+
+
+
+@*<button type="button" class="btn btn-sm btn-danger mt-2 custom-button" onclick="window.location.href='@Url.Action("rooms", "Inventory", new { campus_name = ViewBag.campus_name })'">Back</button>
+    <button type="button" class="btn btn-sm btn-primary mt-2 custom-button" data-bs-toggle="modal" data-bs-target="#createitems">ADD ITEM</button>*@
+
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 mb-4">
+            <div class="card shadow rounded-4 h-100">
+                <div class="card-body">
+                    <h4 class="text-primary">@ViewBag.campus_name</h4>
+                    <h6 class="mb-3">Navigation</h6>
+                    <a href="@Url.Action("Index", "Dashboard", new { campus_name = ViewBag.campus_name })"
+                       class="btn btn-outline-secondary mb-2 w-100 text-start">
+                        <i class="bi bi-tags me-1"></i> HOME
+                    </a>
+                    <a href="@Url.Action("brandlist", "Inventory", new { campus_name = ViewBag.campus_name })"
+                       class="btn btn-outline-secondary mb-2 w-100 text-start">
+                        <i class="bi bi-tags me-1"></i> Brand List
+                    </a>
+                    <a href="@Url.Action("Item_list", "Inventory", new { campus_name = ViewBag.campus_name })"
+                       class="btn btn-outline-secondary mb-2 w-100 text-start">
+                        <i class="bi bi-tags me-1"></i> Item List
+                    </a>
+                    <a href="@Url.Action("rooms", "Inventory", new { campus_name = ViewBag.campus_name })"
+                       class="btn btn-outline-secondary mb-2 w-100 text-start">
+                        <i class="bi bi-tags me-1"></i>Rooms List
+                    </a>
+                    <a href="@Url.Action("materialslist", "Materials", new { campus_name = ViewBag.campus_name })"
+                       class="btn btn-outline-secondary mb-3 w-100 text-start">
+                        <i class="bi bi-tags me-1"></i> Materials List
+                    </a>
+                    <a href="@Url.Action("itemlogs", "Inventory", new { campus_name = ViewBag.campus_name })"
+                       class="btn btn-outline-secondary mb-3 w-100 text-start">
+                        <i class="bi bi-tags me-1"></i> Item Logs
+                    </a>
+                </div>
+            </div>
         </div>
-        <div>
-            <button class="btn btn-danger custom-button" onclick="window.location.href='@Url.Action("rooms", "Inventory", new { campus_name = ViewBag.campus_name })'">Back</button>
-            <button class="btn btn-primary custom-button" data-bs-toggle="modal" data-bs-target="#createitems">Add Item</button>
-        </div>
-    </div>
-
-
-    @*<button type="button" class="btn btn-sm btn-danger mt-2 custom-button" onclick="window.location.href='@Url.Action("rooms", "Inventory", new { campus_name = ViewBag.campus_name })'">Back</button>
-        <button type="button" class="btn btn-sm btn-primary mt-2 custom-button" data-bs-toggle="modal" data-bs-target="#createitems">ADD ITEM</button>*@
-
-    <div class="card">
-        <div class="card-body" style="color: aqua">
-            <div class="row">
-                <div class="col-md-12">
+        <div class="col-md-10">
+            <div class="card shadow rounded-4">
+                <div class="card-body">
+                    <h1 class="text-center">@ViewBag.campus_name</h1>
+                    <h4 class="text-muted text-center">@ViewBag.room_name</h4>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered text-center table-hover">
                             <thead>
                                 <tr>
+                                    <th>ID</th>
                                     <th>ITEM NAME</th>
                                     <th>SERIAL NUMBER</th>
-                                    <th>DATE ARRIVE</th>
+                                    <th>DATE ARRIVED</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var item in Model.Item_list.OrderByDescending(item => item.Date_now))
                                 {
-                                    // Use a safe, unique ID based on item name or a unique identifier
-                                    var modalId = "detailsModal_" + item.Item_name.Replace(" ", "_");
-
-                                    <tr class="clickable-row hover-scale" data-bs-toggle="modal" data-bs-target="#@modalId">
-                                        <td class="center-text">@Html.DisplayFor(modelItem => item.Item_name)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.Serial_number)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.Date_now)</td>
-                                        <td><button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#transfer" onclick="setTransfer('@item.Serial_number')">Transfer</button></td>
+                                    <tr data-bs-toggle="modal" data-bs-target="#detailsModal" data-id="@item.ID" data-itemname="@item.Item_name" data-serialnumber="@item.Serial_number" data-date="@item.Date_now"
+                                        data-model="@item.Model" data-brand="@item.Brand" data-itemtype="@item.Item_type" data-roomname="@item.Room_name" data-status="@item.Item_status"
+                                        data-department="@item.Department" data-campus="@item.Campus_name">
+                                        <td>@item.ID</td>
+                                        <td>@item.Item_name</td>
+                                        <td>@item.Serial_number</td>
+                                        <td>@item.Date_now</td>
+                                        <td><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#transfer">Transfer</button></td>
                                     </tr>
                                 }
                             </tbody>
                         </table>
-                        <!-- Pagination -->
-                        <div class="d-flex justify-content-center mt-3">
-                            <nav>
-                                <ul class="pagination" id="pagination"></ul>
-                            </nav>
-                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    @foreach (var item in Model.Item_list)
-    {
-        // Use a safe, unique ID for the modal
-        var safeId = item.Item_name.Replace(" ", "_");
-        <div class="modal fade" id="detailsModal_@safeId" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="detailsModalLabel">@Html.DisplayFor(modelItem => item.Item_name)</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body text-center">
-                        <strong>MODEL:</strong> @Html.DisplayFor(modelItem => item.Model)<br>
-                        <strong>BRAND:</strong> @Html.DisplayFor(modelItem => item.Brand)<br>
-                        <strong>ITEM TYPE:</strong> @Html.DisplayFor(modelItem => item.Item_type)<br>
-                        <strong>STATUS:</strong> @Html.DisplayFor(modelItem => item.Item_status)<br>
-                        <strong>ROOM NAME:</strong> @Html.DisplayFor(modelItem => item.Room_name)<br>
-                        <strong>DEPARTMENT:</strong> @Html.DisplayFor(modelItem => item.Department)<br>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
+<!-- Details Modal -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel">Item Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>ID:</strong> <span id="modalId"></span></p>
+                <p><strong>Item Name:</strong> <span id="modalItemName"></span></p>
+                <p><strong>Model:</strong> <span id="modalModel"></span></p>
+                <p><strong>Brand:</strong> <span id="modalBrand"></span></p>
+                <p><strong>Serial Number:</strong> <span id="modalSerialNumber"></span></p>
+                <p><strong>Item Type:</strong> <span id="modalItemType"></span></p>
+                <p><strong>Room Name:</strong> <span id="modalRoomName"></span></p>
+                <p><strong>Item Status:</strong> <span id="modalItemStatus"></span></p>
+                <p><strong>Department:</strong> <span id="modalDepartment"></span></p>
+                <p><strong>Campus Name:</strong> <span id="modalCampusName"></span></p>
+                <p><strong>Date Arrived:</strong> <span id="modalDateArrived"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
-    }
+    </div>
+</div>
 
 
 
 
-    @*ADD ITEM*@
-    <div class="modal fade add-item-modal" id="createitems" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title text-center" id="exampleModalLabel">ADD NEW ITEMS</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
+@*ADD ITEM*@
+<div class="modal fade add-item-modal" id="createitems" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title text-center" id="exampleModalLabel">ADD NEW ITEMS</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
 
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="add_item_name" class="form-label fw-bold">Item Name</label>
-                            <input type="text" class="form-control" id="add_item_name" name="add_item_name" placeholder="Enter item name" autocomplete="off" required />
-                        </div>
-                        <div class="col-md-6">
-                            <label for="add_model" class="form-label fw-bold">Model</label>
-                            <input type="text" class="form-control" id="add_model" name="add_model" placeholder="Enter model" autocomplete="off" required />
-                        </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="add_item_name" class="form-label fw-bold">Item Name</label>
+                        <input type="text" class="form-control" id="add_item_name" name="add_item_name" placeholder="Enter item name" autocomplete="off" required />
                     </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="add_brand" class="form-label fw-bold">Brand</label>
-                            <select class="form-select" id="add_brand" name="add_brand" required>
-                                <option value="" disabled selected hidden>Choose a Brand</option>
-                                @foreach (var brand in Model.Allbrand)
+                    <div class="col-md-6">
+                        <label for="add_model" class="form-label fw-bold">Model</label>
+                        <input type="text" class="form-control" id="add_model" name="add_model" placeholder="Enter model" autocomplete="off" required />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="add_brand" class="form-label fw-bold">Brand</label>
+                        <select class="form-select" id="add_brand" name="add_brand" required>
+                            <option value="" disabled selected hidden>Choose a Brand</option>
+                            @foreach (var brand in Model.Allbrand)
+                            {
+                                <option value="@brand.Brand_name">@brand.Brand_name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="add_serial_number" class="form-label fw-bold">Serial Number</label>
+                        <input type="text" class="form-control" id="add_serial_number" name="add_serial_number" placeholder="Enter serial number" autocomplete="off" required />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="add_item_type" class="form-label fw-bold">Item Type</label>
+                        <select class="form-select" id="add_item_type" name="add_item_type" required>
+                            <option value="" disabled selected hidden>Choose Item Type</option>
+                            <option value="COMPONENT">Component</option>
+                            <option value="EQUIPMENT">Equipment</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="add_item_status" class="form-label fw-bold">Status</label>
+                        <select class="form-select" id="add_item_status" name="add_item_status">
+                            <option value="" disabled selected hidden>Choose Status</option>
+                            <option value="NOT USE">NOT USE</option>
+                            <option value="USE">USE</option>
+                            <option value="BROKEN">BROKEN</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="add_item_department" class="form-label fw-bold">Department</label>
+                        <select class="form-select" id="add_item_department" name="add_item_department">
+                            <option value="" disabled selected hidden>Choose Department</option>
+                            <option value="H.R.M">H.R.M</option>
+                            <option value="I.T">I.T</option>
+                            <option value="EDUCATION">Education</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="add_date" class="form-label fw-bold">Date Arrive</label>
+                        <input type="datetime-local" class="form-control" id="add_date" name="add_date" autocomplete="off" required />
+                    </div>
+                    <div class="col-md-6">
+
+                        <input type="text" class="form-control visually-hidden" id="add_room" name="add_room" value="@ViewBag.room_name" autocomplete="off" required />
+                    </div>
+
+                    <input type="text" class="form-control visually-hidden" id="add_campus" name="add_campus" value="@ViewBag.campus_name" autocomplete="off" required readonly />
+                </div>
+                <div class="modal-footer text-center">
+                    <button class="btn btn-primary" id="insideroomdataBtn">ADD</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">BACK</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@* TRANSFER MODAL *@
+
+<div class="modal fade" id="transfer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">TRANSFER TO:</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="transfer_serial_no">SERIAL NUMBER:</label>
+                            <input type="text" class="form-control" id="transfer_serial_no" name="transfer_serial_no" autocomplete="off" required readonly />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="transfer_room_name">TRANSFER TO:</label>
+                            <select class="form-control" id="transfer_room_name" name="transfer_room_name" autocomplete="off">
+                                @foreach (var item in Model.Room_list)
                                 {
-                                    <option value="@brand.Brand_name">@brand.Brand_name</option>
+                                    <option value="@item.Room_name">@item.Room_name</option>
                                 }
                             </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="add_serial_number" class="form-label fw-bold">Serial Number</label>
-                            <input type="text" class="form-control" id="add_serial_number" name="add_serial_number" placeholder="Enter serial number" autocomplete="off" required />
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="add_item_type" class="form-label fw-bold">Item Type</label>
-                            <select class="form-select" id="add_item_type" name="add_item_type" required>
-                                <option value="" disabled selected hidden>Choose Item Type</option>
-                                <option value="COMPONENT">Component</option>
-                                <option value="EQUIPMENT">Equipment</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="add_item_status" class="form-label fw-bold">Status</label>
-                            <select class="form-select" id="add_item_status" name="add_item_status">
-                                <option value="" disabled selected hidden>Choose Status</option>
-                                <option value="NOT USE">NOT USE</option>
-                                <option value="USE">USE</option>
-                                <option value="BROKEN">BROKEN</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="add_item_department" class="form-label fw-bold">Department</label>
-                            <select class="form-select" id="add_item_department" name="add_item_department">
-                                <option value="" disabled selected hidden>Choose Department</option>
-                                <option value="H.R.M">H.R.M</option>
-                                <option value="I.T">I.T</option>
-                                <option value="EDUCATION">Education</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="add_date" class="form-label fw-bold">Date Arrive</label>
-                            <input type="datetime-local" class="form-control" id="add_date" name="add_date" autocomplete="off" required />
-                        </div>
-                        <div class="col-md-6">
-
-                            <input type="text" class="form-control visually-hidden" id="add_room" name="add_room" value="@ViewBag.room_name" autocomplete="off" required />
-                        </div>
-
-                        <input type="text" class="form-control visually-hidden" id="add_campus" name="add_campus" value="@ViewBag.campus_name" autocomplete="off" required readonly />
-                    </div>
-                    <div class="modal-footer text-center">
-                        <button class="btn btn-primary" id="insideroomdataBtn">ADD</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">BACK</button>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    @* TRANSFER MODAL *@
-
-    <div class="modal fade" id="transfer" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">TRANSFER TO:</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="card">
-                        <div class="card-body">
                             <div class="form-group">
-                                <label for="transfer_serial_no">SERIAL NUMBER:</label>
-                                <input type="text" class="form-control" id="transfer_serial_no" name="transfer_serial_no" autocomplete="off" required readonly />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="transfer_room_name">TRANSFER TO:</label>
-                                <select class="form-control" id="transfer_room_name" name="transfer_room_name" autocomplete="off">
-                                    @foreach (var item in Model.Room_list)
+                                <label for="transfer_requested_by">REQUESTED BY</label>
+                                <select class="form-control" id="transfer_requested_by" name="transfer_requested_by" autocomplete="off" required>
+                                    @foreach (var item in Model.Employees)
                                     {
-                                        <option value="@item.Room_name">@item.Room_name</option>
+                                        <option value="@item.Firstname">@item.Firstname</option>
                                     }
                                 </select>
-                                <div class="form-group">
-                                    <label for="transfer_requested_by">REQUESTED BY</label>
-                                    <select class="form-control" id="transfer_requested_by" name="transfer_requested_by" autocomplete="off" required>
-                                        @foreach (var item in Model.Employees)
-                                        {
-                                            <option value="@item.Firstname">@item.Firstname</option>
-                                        }
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="transfer_by">TRANSFER BY</label>
-                                    <select class="form-control" id="transfer_by" name="transfer_by" autocomplete="off" required>
-                                        @foreach (var item in Model.Employees)
-                                        {
-                                            <option value="@item.Firstname">@item.Firstname</option>
-                                        }
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-
-                                    <input type="text" class="form-control" id="transfer_campus_name" value="@ViewBag.campus_name" name="transfer_campus_name" autocomplete="off" required readonly />
-                                </div>
-
                             </div>
+                            <div class="form-group">
+                                <label for="transfer_by">TRANSFER BY</label>
+                                <select class="form-control" id="transfer_by" name="transfer_by" autocomplete="off" required>
+                                    @foreach (var item in Model.Employees)
+                                    {
+                                        <option value="@item.Firstname">@item.Firstname</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+
+                                <input type="text" class="form-control" id="transfer_campus_name" value="@ViewBag.campus_name" name="transfer_campus_name" autocomplete="off" required readonly />
+                            </div>
+
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-primary" id="transferbtn">PROCEED</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">BACK</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-    <!-- Error Modal Dialog -->
-    <div class="modal fade" id="model_error" tabindex="-1" aria-labelledby="model_errorLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="model_errorLabel">Error</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p id="error_message"></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-primary" id="transferbtn">PROCEED</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">BACK</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Success Modal Dialog -->
-    <div class="modal fade" id="model_success" tabindex="-1" aria-labelledby="model_successLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
-            <div class="modal-content">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title" id="model_successLabel">Success</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p id="success_message"></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
+
+
+<!-- Error Modal Dialog -->
+<div class="modal fade" id="model_error" tabindex="-1" aria-labelledby="model_errorLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="model_errorLabel">Error</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="error_message"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
+</div>
+
+<!-- Success Modal Dialog -->
+<div class="modal fade" id="model_success" tabindex="-1" aria-labelledby="model_successLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="model_successLabel">Success</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="success_message"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
-    <script>
-        $(document).ready(function () {
-            $("#insideroomdataBtn").click(function () {
-                $("#error_message").text("");
+<script>
+    $(document).ready(function () {
+        $("#insideroomdataBtn").click(function () {
+            $("#error_message").text("");
 
-                var add_item_name = $("#add_item_name").val();
-                if (add_item_name === '') {
-                    showErrorMessage("Please supply an ITEM NAME.");
-                    return;
+            var add_item_name = $("#add_item_name").val();
+            if (add_item_name === '') {
+                showErrorMessage("Please supply an ITEM NAME.");
+                return;
+            }
+
+            var add_model = $("#add_model").val();
+            if (add_model === '') {
+                showErrorMessage("Please supply an ITEM MODEL.");
+                return;
+            }
+
+            var add_brand = $("#add_brand").val();
+            if (add_brand === null || add_brand === '') {
+                showErrorMessage("Please choose a valid ITEM BRAND.");
+                return;
+            }
+
+            var add_serial_number = $("#add_serial_number").val();
+            if (add_serial_number === '') {
+                showErrorMessage("Please supply an ITEM SERIAL NUMBER.");
+                return;
+            }
+
+            var add_item_type = $("#add_item_type").val();
+            if (add_item_type === null || add_item_type === '') {
+                showErrorMessage("Please choose a valid ITEM TYPE.");
+                return;
+            }
+
+            var add_item_status = $("#add_item_status").val();
+            if (add_item_status === null || add_item_status === '') {
+                showErrorMessage("Please choose a valid ITEM STATUS.");
+                return;
+            }
+
+            var add_item_department = $("#add_item_department").val();
+            if (add_item_department === null || add_item_department === '') {
+                showErrorMessage("Please choose a valid ITEM DEPARTMENT.");
+                return;
+            }
+
+            var add_date = $("#add_date").val();
+            if (add_date === '') {
+                showErrorMessage("Please choose a valid DATE.");
+                return;
+            }
+
+            var add_room = $("#add_room").val();
+            if (add_room === null || add_room === '') {
+                showErrorMessage("Please choose a valid ROOM NAME.");
+                return;
+            }
+
+            var add_campus = $("#add_campus").val();
+            if (add_campus === '') {
+                showErrorMessage("Please supply a CAMPUS NAME.");
+                return;
+            }
+
+            var insideroomdata = {
+                add_item_name: add_item_name,
+                add_model: add_model,
+                add_brand: add_brand,
+                add_serial_number: add_serial_number,
+                add_item_type: add_item_type,
+                add_item_status: add_item_status,
+                add_item_department: add_item_department,
+                add_date: add_date,
+                add_room: add_room,
+                add_campus: add_campus
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "/Inventory/createitems",
+                data: insideroomdata,
+                success: function (response) {
+                    showSuccessMessage(response);
+                },
+                error: function () {
+                    showErrorMessage("An error occurred while adding the item");
                 }
-
-                var add_model = $("#add_model").val();
-                if (add_model === '') {
-                    showErrorMessage("Please supply an ITEM MODEL.");
-                    return;
-                }
-
-                var add_brand = $("#add_brand").val();
-                if (add_brand === null || add_brand === '') {
-                    showErrorMessage("Please choose a valid ITEM BRAND.");
-                    return;
-                }
-
-                var add_serial_number = $("#add_serial_number").val();
-                if (add_serial_number === '') {
-                    showErrorMessage("Please supply an ITEM SERIAL NUMBER.");
-                    return;
-                }
-
-                var add_item_type = $("#add_item_type").val();
-                if (add_item_type === null || add_item_type === '') {
-                    showErrorMessage("Please choose a valid ITEM TYPE.");
-                    return;
-                }
-
-                var add_item_status = $("#add_item_status").val();
-                if (add_item_status === null || add_item_status === '') {
-                    showErrorMessage("Please choose a valid ITEM STATUS.");
-                    return;
-                }
-
-                var add_item_department = $("#add_item_department").val();
-                if (add_item_department === null || add_item_department === '') {
-                    showErrorMessage("Please choose a valid ITEM DEPARTMENT.");
-                    return;
-                }
-
-                var add_date = $("#add_date").val();
-                if (add_date === '') {
-                    showErrorMessage("Please choose a valid DATE.");
-                    return;
-                }
-
-                var add_room = $("#add_room").val();
-                if (add_room === null || add_room === '') {
-                    showErrorMessage("Please choose a valid ROOM NAME.");
-                    return;
-                }
-
-                var add_campus = $("#add_campus").val();
-                if (add_campus === '') {
-                    showErrorMessage("Please supply a CAMPUS NAME.");
-                    return;
-                }
-
-                var insideroomdata = {
-                    add_item_name: add_item_name,
-                    add_model: add_model,
-                    add_brand: add_brand,
-                    add_serial_number: add_serial_number,
-                    add_item_type: add_item_type,
-                    add_item_status: add_item_status,
-                    add_item_department: add_item_department,
-                    add_date: add_date,
-                    add_room: add_room,
-                    add_campus: add_campus
-                };
-
-                $.ajax({
-                    type: "POST",
-                    url: "/Inventory/createitems",
-                    data: insideroomdata,
-                    success: function (response) {
-                        showSuccessMessage(response);
-                    },
-                    error: function () {
-                        showErrorMessage("An error occurred while adding the item");
-                    }
-                });
             });
-
-            function showErrorMessage(message) {
-                $("#error_message").text(message);
-                $("#model_error").modal("show");
-            }
-
-            function showSuccessMessage(response) {
-                var successMessage = "Successfully added item"; // Modify as needed
-                if (response.indexOf(successMessage) !== -1) {
-                    $("#success_message").text(successMessage);
-                    $("#model_success").modal("show");
-
-                    setTimeout(function () {
-                        location.reload();
-                    }, 1000);
-                } else {
-                    // Handle unexpected response here
-                    showErrorMessage("Unexpected response: " + response);
-                }
-            }
         });
 
-    </script>
-
-
-
-    <script>
-        $(document).ready(function () {
-            $("#transferbtn").click(function () {
-                $("#error_message").text("");
-
-                var transfer_serial_no = $("#transfer_serial_no").val();
-                if (transfer_serial_no === '') {
-                    showErrorMessage("Please supply an ITEM NAME.");
-                    return;
-                }
-
-                var transfer_room_name = $("#transfer_room_name").val();
-                if (transfer_room_name === '') {
-                    showErrorMessage("Please supply an ITEM MODEL.");
-                    return;
-                }
-
-                var transfer_requested_by = $("#transfer_requested_by").val();
-                if (transfer_requested_by === null || transfer_requested_by === '') {
-                    showErrorMessage("Please choose a valid ITEM BRAND.");
-                    return;
-                }
-
-                var transfer_by = $("#transfer_by").val();
-                if (transfer_by === '') {
-                    showErrorMessage("Please supply an ITEM SERIAL NUMBER.");
-                    return;
-                }
-
-                var transfer_campus_name = $("#transfer_campus_name").val();
-                if (transfer_campus_name === null || add_item_type === '') {
-                    showErrorMessage("Please choose a valid ITEM TYPE.");
-                    return;
-                }
-
-                var transferdata = {
-                    transfer_serial_no: transfer_serial_no,
-                    transfer_room_name: transfer_room_name,
-                    transfer_requested_by: transfer_requested_by,
-                    transfer_by: transfer_by,
-                    transfer_campus_name: transfer_campus_name
-                };
-
-                $.ajax({
-                    type: "POST",
-                    url: "/Inventory/transfer",
-                    data: transferdata,
-                    success: function (response) {
-                        showSuccessMessage(response);
-                    },
-                    error: function () {
-                        showErrorMessage("An error occurred while transferring the item");
-                    }
-                });
-            });
-
-            function showErrorMessage(message) {
-                $("#error_message").text(message);
-                $("#model_error").modal("show");
-            }
-
-            function showSuccessMessage(response) {
-                var successMessage = "Successfully TRANSFER";
-                if (response.indexOf(successMessage) !== -1) {
-                    $("#success_message").text(successMessage);
-                    $("#model_success").modal("show");
-
-                    setTimeout(function () {
-                        location.reload();
-                    }, 1000);
-                } else {
-                    // Handle unexpected response here
-                    showErrorMessage("Unexpected response: " + response);
-                }
-            }
-        });
-
-    </script>
-
-
-
-
-    <script>
-        function setTransfer(serialNumber) {
-            var transferSerialNoInput = document.getElementById("transfer_serial_no");
-            transferSerialNoInput.value = serialNumber;
+        function showErrorMessage(message) {
+            $("#error_message").text(message);
+            $("#model_error").modal("show");
         }
-    </script>
 
-    <script>
-        $(document).ready(function () {
-            var rowsPerPage = 10;
-            var rows = $('table tbody tr');
-            var pagination = $('#pagination');
-            var rowsCount = rows.length;
-            var pageCount = Math.ceil(rowsCount / rowsPerPage);
+        function showSuccessMessage(response) {
+            var successMessage = "Successfully added item"; // Modify as needed
+            if (response.indexOf(successMessage) !== -1) {
+                $("#success_message").text(successMessage);
+                $("#model_success").modal("show");
 
-            function displayRows(page) {
-                rows.hide();
-                var start = page * rowsPerPage;
-                rows.slice(start, start + rowsPerPage).show();
+                setTimeout(function () {
+                    location.reload();
+                }, 1000);
+            } else {
+                // Handle unexpected response here
+                showErrorMessage("Unexpected response: " + response);
+            }
+        }
+    });
+
+</script>
+
+
+
+<script>
+    $(document).ready(function () {
+        $("#transferbtn").click(function () {
+            $("#error_message").text("");
+
+            var transfer_serial_no = $("#transfer_serial_no").val();
+            if (transfer_serial_no === '') {
+                showErrorMessage("Please supply an ITEM NAME.");
+                return;
             }
 
-            function setupPagination() {
-                pagination.empty();
-                for (var i = 0; i < pageCount; i++) {
-                    pagination.append(
-                        `<li class="page-item"><a class="page-link" href="#">${i + 1}</a></li>`
-                    );
+            var transfer_room_name = $("#transfer_room_name").val();
+            if (transfer_room_name === '') {
+                showErrorMessage("Please supply an ITEM MODEL.");
+                return;
+            }
+
+            var transfer_requested_by = $("#transfer_requested_by").val();
+            if (transfer_requested_by === null || transfer_requested_by === '') {
+                showErrorMessage("Please choose a valid ITEM BRAND.");
+                return;
+            }
+
+            var transfer_by = $("#transfer_by").val();
+            if (transfer_by === '') {
+                showErrorMessage("Please supply an ITEM SERIAL NUMBER.");
+                return;
+            }
+
+            var transfer_campus_name = $("#transfer_campus_name").val();
+            if (transfer_campus_name === null || add_item_type === '') {
+                showErrorMessage("Please choose a valid ITEM TYPE.");
+                return;
+            }
+
+            var transferdata = {
+                transfer_serial_no: transfer_serial_no,
+                transfer_room_name: transfer_room_name,
+                transfer_requested_by: transfer_requested_by,
+                transfer_by: transfer_by,
+                transfer_campus_name: transfer_campus_name
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "/Inventory/transfer",
+                data: transferdata,
+                success: function (response) {
+                    showSuccessMessage(response);
+                },
+                error: function () {
+                    showErrorMessage("An error occurred while transferring the item");
                 }
-                pagination.find('li:first').addClass('active');
-            }
-
-            setupPagination();
-            displayRows(0);
-
-            pagination.on('click', 'li', function (e) {
-                e.preventDefault();
-                var index = $(this).index();
-                pagination.find('li').removeClass('active');
-                $(this).addClass('active');
-                displayRows(index);
-            });
-
-            // Click row redirect
-            $('.clickable-row').click(function () {
-                window.location = $(this).data('href');
             });
         });
-    </script>
 
-    <script>
-        // Store the current location
-        let currentUrl = window.location.href;
+        function showErrorMessage(message) {
+            $("#error_message").text(message);
+            $("#model_error").modal("show");
+        }
 
-        // Track all click events
-        document.addEventListener("click", function (e) {
-            console.log("Clicked element:", e.target);
+        function showSuccessMessage(response) {
+            var successMessage = "Successfully TRANSFER";
+            if (response.indexOf(successMessage) !== -1) {
+                $("#success_message").text(successMessage);
+                $("#model_success").modal("show");
 
-            const link = e.target.closest("a");
-            if (link) {
-                console.warn("Navigation via <a> tag to:", link.href);
+                setTimeout(function () {
+                    location.reload();
+                }, 1000);
+            } else {
+                // Handle unexpected response here
+                showErrorMessage("Unexpected response: " + response);
             }
+        }
+    });
 
-            const button = e.target.closest("button");
-            if (button) {
-                console.log("Button clicked:", button);
+</script>
+
+
+
+
+<script>
+    function setTransfer(serialNumber) {
+        var transferSerialNoInput = document.getElementById("transfer_serial_no");
+        transferSerialNoInput.value = serialNumber;
+    }
+</script>
+
+<script>
+    $(document).ready(function () {
+        var rowsPerPage = 10;
+        var rows = $('table tbody tr');
+        var pagination = $('#pagination');
+        var rowsCount = rows.length;
+        var pageCount = Math.ceil(rowsCount / rowsPerPage);
+
+        function displayRows(page) {
+            rows.hide();
+            var start = page * rowsPerPage;
+            rows.slice(start, start + rowsPerPage).show();
+        }
+
+        function setupPagination() {
+            pagination.empty();
+            for (var i = 0; i < pageCount; i++) {
+                pagination.append(
+                    `<li class="page-item"><a class="page-link" href="#">${i + 1}</a></li>`
+                );
             }
+            pagination.find('li:first').addClass('active');
+        }
 
-            // Delay check to see if page navigates
-            setTimeout(() => {
-                if (window.location.href !== currentUrl) {
-                    console.error("Page redirected to:", window.location.href);
-                }
-            }, 100);
+        setupPagination();
+        displayRows(0);
+
+        pagination.on('click', 'li', function (e) {
+            e.preventDefault();
+            var index = $(this).index();
+            pagination.find('li').removeClass('active');
+            $(this).addClass('active');
+            displayRows(index);
         });
 
-        // Also listen to beforeunload to catch full-page navigation
-        window.addEventListener("beforeunload", function () {
-            console.warn("Page is navigating away from:", currentUrl);
+        // Click row redirect
+        $('.clickable-row').click(function () {
+            window.location = $(this).data('href');
         });
-    </script>
+    });
+</script>
+
+<script>
+    // Store the current location
+    let currentUrl = window.location.href;
+
+    // Track all click events
+    document.addEventListener("click", function (e) {
+        console.log("Clicked element:", e.target);
+
+        const link = e.target.closest("a");
+        if (link) {
+            console.warn("Navigation via <a> tag to:", link.href);
+        }
+
+        const button = e.target.closest("button");
+        if (button) {
+            console.log("Button clicked:", button);
+        }
+
+        // Delay check to see if page navigates
+        setTimeout(() => {
+            if (window.location.href !== currentUrl) {
+                console.error("Page redirected to:", window.location.href);
+            }
+        }, 100);
+    });
+
+    // Also listen to beforeunload to catch full-page navigation
+    window.addEventListener("beforeunload", function () {
+        console.warn("Page is navigating away from:", currentUrl);
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tableRows = document.querySelectorAll('tr[data-bs-toggle="modal"]');
+
+        tableRows.forEach(function (row) {
+            row.addEventListener('click', function () {
+                document.getElementById('modalId').textContent = row.getAttribute('data-id');
+                document.getElementById('modalItemName').textContent = row.getAttribute('data-itemname');
+                document.getElementById('modalModel').textContent = row.getAttribute('data-model');
+                document.getElementById('modalBrand').textContent = row.getAttribute('data-brand');
+                document.getElementById('modalSerialNumber').textContent = row.getAttribute('data-serialnumber');
+                document.getElementById('modalItemType').textContent = row.getAttribute('data-itemtype');
+                document.getElementById('modalRoomName').textContent = row.getAttribute('data-roomname');
+                document.getElementById('modalItemStatus').textContent = row.getAttribute('data-status');
+                document.getElementById('modalDepartment').textContent = row.getAttribute('data-department');
+                document.getElementById('modalCampusName').textContent = row.getAttribute('data-campus');
+                document.getElementById('modalDateArrived').textContent = row.getAttribute('data-date');
+            });
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var transferButtons = document.querySelectorAll('button[data-bs-toggle="modal"][data-bs-target="#transfer"]');
+
+        transferButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                var row = button.closest('tr');
+                document.getElementById('transfer_serial_no').value = row.getAttribute('data-serialnumber');
+            });
+        });
+    });
+</script>

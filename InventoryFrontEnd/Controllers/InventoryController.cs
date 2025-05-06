@@ -502,7 +502,6 @@ namespace InventoryFrontEnd.Controllers
             ViewBag.LastName = Session["LastName"];
             ViewBag.campusName = Session["campusName"];
             ViewBag.campus_name = Campus_name;
-            ViewBag.counter = Counter;
             if (User.Identity.IsAuthenticated == false)
             {
                 return RedirectToAction("", "login");
@@ -692,14 +691,14 @@ namespace InventoryFrontEnd.Controllers
             
         }
 
-        public IEnumerable<Employee_Account> employee_acc(string campus_name)
+        public IEnumerable<Employee_Account> employee_acc(string Campus_name)
         {
 
             IEnumerable<Employee_Account> ec = null;
             HttpClient hc = new HttpClient();
-            hc.BaseAddress = new Uri(ConfigurationManager.AppSettings["API_Path"] + "api/inventory/Employee/");
+            hc.BaseAddress = new Uri(ConfigurationManager.AppSettings["API_Path"] + "API/Inventory/Employee/");
 
-            var consumedata = hc.GetAsync("List?campus_name=" + campus_name);
+            var consumedata = hc.GetAsync("List?Campus_name=" + Campus_name);
             consumedata.Wait();
 
 
