@@ -7,138 +7,237 @@
 
 <head>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .sidebar {
+            position: sticky;
+            top: 1rem;
+            align-self: flex-start;
+        }
 
+        .card-body a.btn {
+            white-space: nowrap;
+        }
+
+        .hover-scale:hover {
+            transform: scale(1.02);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            border-radius: 1rem;
+        }
+
+        .btn {
+            font-weight: 500;
+        }
+
+        .table th, .table td {
+            vertical-align: middle !important;
+            padding: 0.75rem;
+        }
+
+        .navbar {
+            border-radius: 0.75rem;
+        }
+
+        .table thead {
+            background-color: #343a40;
+            color: #fff;
+        }
+    </style>
 
 </head>
 
-<div class="container-fluid py-4">
-    <div class="row">
-        <!-- Sidebar -->
-        <div class="col-md-2 mb-4">
-            <div class="card shadow rounded-4 h-100">
-                <div class="card-body">
-                    <h4 class="text-primary">@ViewBag.campus_name</h4>
-                    <h6 class="mb-3">Navigation</h6>
-                    <a href="@Url.Action("Index", "Dashboard", new { campus_name = ViewBag.campus_name })"
-                       class="btn btn-outline-secondary mb-2 w-100 text-start">
-                        <i class="bi bi-tags me-1"></i> HOME
-                    </a>
-                    <a href="@Url.Action("brandlist", "Inventory", new { campus_name = ViewBag.campus_name })"
-                       class="btn btn-outline-secondary mb-2 w-100 text-start">
-                        <i class="bi bi-tags me-1"></i> Brand List
-                    </a>
-                    <a href="@Url.Action("Item_list", "Inventory", new { campus_name = ViewBag.campus_name })"
-                       class="btn btn-outline-secondary mb-2 w-100 text-start">
-                        <i class="bi bi-tags me-1"></i> Item List
-                    </a>
-                    <a href="@Url.Action("rooms", "Inventory", new { campus_name = ViewBag.campus_name })"
-                       class="btn btn-outline-secondary mb-2 w-100 text-start">
-                        <i class="bi bi-tags me-1"></i> Room List
-                    </a>
-                    <a href="@Url.Action("materialslist", "Materials", new { campus_name = ViewBag.campus_name })"
-                       class="btn btn-outline-secondary mb-3 w-100 text-start">
-                        <i class="bi bi-tags me-1"></i>Materials List
-                    </a>
-                    <a href="@Url.Action("itemlogs", "Inventory", new { campus_name = ViewBag.campus_name })"
-                       class="btn btn-outline-secondary mb-3 w-100 text-start">
-                        <i class="bi bi-tags me-1"></i> Item Logs
-                    </a>
+<body>
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-md-2 mb-4 d-flex flex-column">
+                <div class="card shadow rounded-4 sidebar">
+                    <div class="card-body">
+                        <h4 class="text-primary">@ViewBag.campus_name</h4>
+                        <h6 class="mb-3">Navigation</h6>
+                        <a href="@Url.Action("Index", "Dashboard", new { campus_name = ViewBag.campus_name })"
+                           class="btn btn-outline-secondary mb-2 w-100 text-start">
+                            <i class="bi bi-tags me-1"></i>Home
+                        </a>
+                        <a href="@Url.Action("Campus", "Inventory", new { campus_name = ViewBag.campus_name })"
+                           class="btn btn-outline-secondary mb-2 w-100 text-start">
+                            <i class="bi bi-bank2"></i>Campus List
+                        </a>
+                        <a href="@Url.Action("brandlist", "Inventory", new { campus_name = ViewBag.campus_name })"
+                           class="btn btn-outline-secondary mb-2 w-100 text-start">
+                            <i class="bi bi-tags me-1"></i> Brand List
+                        </a>
+                        <a href="@Url.Action("Item_list", "Inventory", new { campus_name = ViewBag.campus_name })"
+                           class="btn btn-outline-secondary mb-2 w-100 text-start">
+                            <i class="bi bi-box-fill"></i> Item List
+                        </a>
+                        <a href="@Url.Action("rooms", "Inventory", new { campus_name = ViewBag.campus_name })"
+                           class="btn btn-outline-secondary mb-2 w-100 text-start">
+                            <i class="bi bi-tags me-1"></i> Room List
+                        </a>
+                        <a href="@Url.Action("materialslist", "Materials", new { campus_name = ViewBag.campus_name })"
+                           class="btn btn-outline-secondary mb-3 w-100 text-start">
+                            <i class="bi bi-tags me-1"></i>Materials List
+                        </a>
+                        <a href="@Url.Action("itemlogs", "Inventory", new { campus_name = ViewBag.campus_name })"
+                           class="btn btn-outline-secondary mb-3 w-100 text-start">
+                            <i class="bi bi-clipboard2-data"></i> Item Logs
+                        </a>
+                        <a href="@Url.Action("logout", "dashboard")"
+                           class="btn btn-outline-secondary mb-3 w-100 text-start">
+                            <i class="bi bi-box-arrow-right me-1"></i> Log Out
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Main Content -->
-        <div class="col-md-10">
-            <div class="card shadow rounded-4">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-                        <div>
-                            <h2 class="mb-1 text-primary">@ViewBag.campus_name</h2>
-                            <h4 class="mb-0">Room List</h4>
+           
+            <div class="col-md-10">
+                <div class="card shadow rounded-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+                            <div>
+                                <h2 class="mb-1 text-primary">@ViewBag.campus_name</h2>
+                                <h4 class="mb-0">Room List</h4>
+                            </div>
+                            <h5 class="text-center">
+                                Total Rooms:
+                                <span class="badge bg-info fs-5">@Model.Room_list.Count()</span>
+                            </h5>
+                            <input type="text" id="tableSearch" class="form-control me-2" placeholder="Search...">
+                            <div class="d-flex">
+                                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createroombtn">
+                                    <i class="bi bi-plus-circle"></i> Add Room
+                                </button>
+                            </div>
                         </div>
-                        <h5 class="text-center">
-                            Total Rooms:
-                            <span class="badge bg-info fs-5">@Model.Room_list.Count()</span>
-                        </h5>
-                        <input type="text" id="tableSearch" class="form-control me-2" placeholder="Search...">
-                        <div class="d-flex">
-                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createroombtn">
-                                <i class="bi bi-plus-circle"></i> Add Room
-                            </button>
-                        </div>
-                    </div>
 
-                    <!-- Table -->
-                    <div class="table-responsive">
-                        <table class="table table-hover table-striped table-bordered align-middle text-center">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th>Room Name</th>
-                                    <th>Floor Level</th>
-                                    <th>Room Description</th>
-                                    @if (Session["UserRole"] != null && Session["UserRole"].ToString() != "IT Asset Incharge" && Session["UserRole"].ToString() != "Apparel Incharge")
-                                    {
-                                        <th>Action</th>
-                                    }
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.Room_list.OrderBy(x => x.Floor_level))
-                                {
-                                    <tr class="clickable-row" data-href="@Url.Action("Insideroom", "Inventory", new { room_name = item.Room_name, campus_name = ViewBag.campus_name })">
-                                        <td>@Html.DisplayFor(modelItem => item.Room_name)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.Floor_level)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.Room_description)</td>
+                        <!-- Table -->
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped table-bordered align-middle text-center">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Room Name</th>
+                                        <th>Floor Level</th>
+                                        <th>Room Description</th>
                                         @if (Session["UserRole"] != null && Session["UserRole"].ToString() != "IT Asset Incharge" && Session["UserRole"].ToString() != "Apparel Incharge")
                                         {
-                                            <td>
-                                                <button class="btn btn-outline-primary btn-sm"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#updateroom"
-                                                        onclick="setoUPDATErooms('@item.Room_name', '@item.Room_description', '@item.Floor_level', '@item.ID'); event.stopPropagation();">
-                                                    Modify
-                                                </button>
-                                            </td>
+                                            <th>Action</th>
                                         }
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Room_list.OrderBy(x => x.Floor_level))
+                                    {
+                                        <tr class="clickable-row" data-href="@Url.Action("Insideroom", "Inventory", new { room_name = item.Room_name, campus_name = ViewBag.campus_name })">
+                                            <td>@Html.DisplayFor(modelItem => item.Room_name)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Floor_level)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.Room_description)</td>
+                                            @if (Session["UserRole"] != null && Session["UserRole"].ToString() != "IT Asset Incharge" && Session["UserRole"].ToString() != "Apparel Incharge")
+                                            {
+                                                <td>
+                                                    <button class="btn btn-outline-primary btn-sm"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#updateroom"
+                                                            onclick="setoUPDATErooms('@item.Room_name', '@item.Room_description', '@item.Floor_level', '@item.ID'); event.stopPropagation();">
+                                                        Modify
+                                                    </button>
+                                                </td>
+                                            }
+                                        </tr>
+                                    }
+                                </tbody>
 
-                        <!-- Pagination -->
-                        <div class="d-flex justify-content-center mt-3">
-                            <nav>
-                                <ul class="pagination" id="pagination"></ul>
-                            </nav>
+                            </table>
+                            <!-- Pagination -->
+                            <div class="d-flex justify-content-center mt-3">
+                                <nav>
+                                    <ul class="pagination" id="pagination"></ul>
+                                </nav>
+                            </div>
                         </div>
+                           
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 
-<!-- ADD ROOMS Modal -->
-<div class="modal fade add-item-modal" id="createroombtn" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-static">
-        <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h2 class="modal-title" id="exampleModalLabel">ADD NEW ROOM</h2>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="row mb-3">
-                        <div class="col-12 col-md-6">
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="add_room_name" name="add_room_name" placeholder=" " autocomplete="off" required />
-                                <label for="add_room_name" class="form-label">Room Name</label>
+    <!-- ADD ROOMS Modal -->
+    <div class="modal fade add-item-modal" id="createroombtn" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-static">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h2 class="modal-title" id="exampleModalLabel">ADD NEW ROOM</h2>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row mb-3">
+                            <div class="col-12 col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="add_room_name" name="add_room_name" placeholder=" " autocomplete="off" required />
+                                    <label for="add_room_name" class="form-label">Room Name</label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-floating mb-3">
+                                    <select class="form-select" id="add_floor_level" name="add_floor_level" required>
+                                        <option value="" disabled selected hidden>Choose FLOOR LEVEL</option>
+                                        <option value="1ST FLOOR">1ST FLOOR</option>
+                                        <option value="2ND FLOOR">2ND FLOOR</option>
+                                        <option value="3RD FLOOR">3RD FLOOR</option>
+                                        <option value="4TH FLOOR">4TH FLOOR</option>
+                                        <option value="5TH FLOOR">5TH FLOOR</option>
+                                        <option value="ROOFTOP">ROOFTOP</option>
+                                    </select>
+                                    <label for="add_floor_level" class="form-label">Floor Level</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="add_room_description" name="add_room_description" placeholder=" " autocomplete="off" required />
+                                    <label for="add_room_description" class="form-label">Room Description</label>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-12 col-md-6">
-                            <div class="form-floating mb-3">
-                                <select class="form-select" id="add_floor_level" name="add_floor_level" required>
+                        <div class="visually-hidden">
+                            <input type="text" class="form-control" id="add_campus_name" value="@ViewBag.campus_name" name="add_campus_name" autocomplete="off" readonly />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer fixed-bottom text-center">
+                    <button class="btn btn-success" id="addroombtn">ADD</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- UPDATE ROOMS Modal -->
+    <div class="modal fade" id="updateroom" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">UPDATE</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="update_room_name">ROOM NAME:</label>
+                                <input type="text" class="form-control" id="update_room_name" name="update_room_name" autocomplete="off" />
+                            </div>
+                            <div class="form-group">
+                                <label for="update_floorlevel">FLOOR LEVEL:</label>
+                                <select class="form-select" id="update_floorlevel" name="update_floorlevel" required>
                                     <option value="" disabled selected hidden>Choose FLOOR LEVEL</option>
                                     <option value="1ST FLOOR">1ST FLOOR</option>
                                     <option value="2ND FLOOR">2ND FLOOR</option>
@@ -147,113 +246,65 @@
                                     <option value="5TH FLOOR">5TH FLOOR</option>
                                     <option value="ROOFTOP">ROOFTOP</option>
                                 </select>
-                                <label for="add_floor_level" class="form-label">Floor Level</label>
                             </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="add_room_description" name="add_room_description" placeholder=" " autocomplete="off" required />
-                                <label for="add_room_description" class="form-label">Room Description</label>
+                            <div class="form-group">
+                                <label for="update_room_description">ROOM DESCRIPTION:</label>
+                                <input type="text" class="form-control" id="update_room_description" name="update_room_description" autocomplete="off" />
                             </div>
-                        </div>
-                    </div>
-                    <div class="visually-hidden">
-                        <input type="text" class="form-control" id="add_campus_name" value="@ViewBag.campus_name" name="add_campus_name" autocomplete="off" readonly />
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer fixed-bottom text-center">
-                <button class="btn btn-success" id="addroombtn">ADD</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CANCEL</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- UPDATE ROOMS Modal -->
-<div class="modal fade" id="updateroom" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">UPDATE</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label for="update_room_name">ROOM NAME:</label>
-                            <input type="text" class="form-control" id="update_room_name" name="update_room_name" autocomplete="off" />
-                        </div>
-                        <div class="form-group">
-                            <label for="update_floorlevel">FLOOR LEVEL:</label>
-                            <select class="form-select" id="update_floorlevel" name="update_floorlevel" required>
-                                <option value="" disabled selected hidden>Choose FLOOR LEVEL</option>
-                                <option value="1ST FLOOR">1ST FLOOR</option>
-                                <option value="2ND FLOOR">2ND FLOOR</option>
-                                <option value="3RD FLOOR">3RD FLOOR</option>
-                                <option value="4TH FLOOR">4TH FLOOR</option>
-                                <option value="5TH FLOOR">5TH FLOOR</option>
-                                <option value="ROOFTOP">ROOFTOP</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="update_room_description">ROOM DESCRIPTION:</label>
-                            <input type="text" class="form-control" id="update_room_description" name="update_room_description" autocomplete="off" />
-                        </div>
-                        <div class="form-group">
-                            <input type="hidden" class="form-control" id="update_room_id" name="update_room_id" autocomplete="off" />
+                            <div class="form-group">
+                                <input type="hidden" class="form-control" id="update_room_id" name="update_room_id" autocomplete="off" />
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" id="updateroombtn">Update </button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Error Modal Dialog -->
-<div class="modal fade" id="model_error" tabindex="-1" aria-labelledby="model_errorLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title" id="model_errorLabel">Error</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p id="error_message"></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" id="updateroombtn">Update </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Success Modal Dialog -->
-<div class="modal fade" id="model_success" tabindex="-1" aria-labelledby="model_successLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content">
-            <div class="modal-header bg-success text-white">
-                <h5 class="modal-title" id="model_successLabel">Success</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p id="success_message"></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <!-- Error Modal Dialog -->
+    <div class="modal fade" id="model_error" tabindex="-1" aria-labelledby="model_errorLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="model_errorLabel">Error</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="error_message"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <!-- Success Modal Dialog -->
+    <div class="modal fade" id="model_success" tabindex="-1" aria-labelledby="model_successLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="model_successLabel">Success</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="success_message"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
-<script src="~/JS Scripts/RoomScipts.js"></script>
+    <script src="~/JS Scripts/RoomScipts.js"></script>
 
+</body>
 
 
 

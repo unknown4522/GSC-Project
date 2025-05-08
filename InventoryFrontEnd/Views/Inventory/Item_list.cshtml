@@ -6,802 +6,864 @@
 
 }
 
+<html>
+<head>
 
-<style>
-    .hover-scale:hover {
-        transform: scale(1.01);
-        transition: transform 0.2s ease-in-out;
-    }
-</style>
+    <style>
+        .sidebar {
+            position: sticky;
+            top: 1rem;
+            align-self: flex-start;
+        }
 
+        .card-body a.btn {
+            white-space: nowrap;
+        }
 
-<div class="container-fluid py-4">
-    <div class="row">
-        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Inventory Dashboard</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="bi bi-person-circle me-1"></i>@ViewBag.firstName @ViewBag.LastName</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-danger" href="@Url.Action("logout", "dashboard")"><i class="bi bi-box-arrow-right me-1"></i>Logout</a>
-                        </li>
-                    </ul>
+        .hover-scale:hover {
+            transform: scale(1.02);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            border-radius: 1rem;
+        }
+
+        .btn {
+            font-weight: 500;
+        }
+
+        .table th, .table td {
+            vertical-align: middle !important;
+            padding: 0.75rem;
+        }
+
+        .navbar {
+            border-radius: 0.75rem;
+        }
+
+        .table thead {
+            background-color: #343a40;
+            color: #fff;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden; /* disables scrolling */
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-md-2 mb-4 d-flex flex-column">
+                <div class="card shadow rounded-4 sidebar">
+
+                    <div class="card-body">
+                        <h4 class="text-primary">@ViewBag.campus_name</h4>
+                        <h6 class="mb-3">Navigation</h6>
+                        <a href="@Url.Action("Index", "Dashboard", new { campus_name = ViewBag.campus_name })"
+                           class="btn btn-outline-secondary mb-2 w-100 text-start">
+                            <i class="bi bi-tags me-1"></i>Home
+                        </a>
+                        <a href="@Url.Action("Campus", "Inventory", new { campus_name = ViewBag.campus_name })"
+                           class="btn btn-outline-secondary mb-2 w-100 text-start">
+                            <i class="bi bi-bank2"></i>Campus List
+                        </a>
+                        <a href="@Url.Action("brandlist", "Inventory", new { campus_name = ViewBag.campus_name })"
+                           class="btn btn-outline-secondary mb-2 w-100 text-start">
+                            <i class="bi bi-tags me-1"></i> Brand List
+                        </a>
+                        <a href="@Url.Action("Item_list", "Inventory", new { campus_name = ViewBag.campus_name })"
+                           class="btn btn-outline-secondary mb-2 w-100 text-start">
+                            <i class="bi bi-box-fill"></i> Item List
+                        </a>
+                        <a href="@Url.Action("rooms", "Inventory", new { campus_name = ViewBag.campus_name })"
+                           class="btn btn-outline-secondary mb-2 w-100 text-start">
+                            <i class="bi bi-tags me-1"></i> Room List
+                        </a>
+                        <a href="@Url.Action("materialslist", "Materials", new { campus_name = ViewBag.campus_name })"
+                           class="btn btn-outline-secondary mb-3 w-100 text-start">
+                            <i class="bi bi-tags me-1"></i>Materials List
+                        </a>
+                        <a href="@Url.Action("itemlogs", "Inventory", new { campus_name = ViewBag.campus_name })"
+                           class="btn btn-outline-secondary mb-3 w-100 text-start">
+                            <i class="bi bi-clipboard2-data"></i> Item Logs
+                        </a>
+                        <a href="@Url.Action("logout", "dashboard")"
+                           class="btn btn-outline-secondary mb-3 w-100 text-start">
+                            <i class="bi bi-box-arrow-right me-1"></i> Log Out
+                        </a>
+                    </div>
                 </div>
             </div>
-        </nav>
-        <div class="col-md-2 mb-4">
-            <div class="card shadow rounded-4 h-100">
-                <div class="card-body">
-                    <h4 class="text-primary">@ViewBag.campus_name</h4>
-                    <h6 class="mb-3">Navigation</h6>
 
-                    <a href="@Url.Action("brandlist", "Inventory", new { campus_name = ViewBag.campus_name })"
-                       class="btn btn-outline-secondary mb-2 w-100 text-start">
-                        <i class="bi bi-tags me-1"></i> Brand List
-                    </a>
-                    <a href="@Url.Action("Item_list", "Inventory", new { campus_name = ViewBag.campus_name })"
-                       class="btn btn-outline-secondary mb-2 w-100 text-start">
-                        <i class="bi bi-tags me-1"></i> Item List
-                    </a>
-                    <a href="@Url.Action("rooms", "Inventory", new { campus_name = ViewBag.campus_name })"
-                       class="btn btn-outline-secondary mb-2 w-100 text-start">
-                        <i class="bi bi-tags me-1"></i> Room List
-                    </a>
-                    <a href="@Url.Action("materialslist", "Materials", new { campus_name = ViewBag.campus_name })"
-                       class="btn btn-outline-secondary mb-3 w-100 text-start">
-                        <i class="bi bi-tags me-1"></i>Materials List
-                    </a>
-                    <a href="@Url.Action("itemlogs", "Inventory", new { campus_name = ViewBag.campus_name })"
-                       class="btn btn-outline-secondary mb-3 w-100 text-start">
-                        <i class="bi bi-tags me-1"></i> Item Logs
-                    </a>
-                </div>
-            </div>
-        </div>
+            <div class="col-md-10 py-4">
+                <div class="row g-3 mb-4">
+                    <div class="card shadow rounded-4">
+                        <h2 id="room-label" class="text-center mt-4 text-primary">@ViewBag.campus_name</h2>
+                        <h4 class="text-center text-secondary mb-4">ITEM LIST</h4>
 
-        <div class="col-md-9 h-100">
-            <div class="sticky-xl-top">
-                <h2 id="room-label" class="text-center mt-4 text-primary">@ViewBag.campus_name</h2>
-                <h4 class="text-center text-secondary mb-4">ITEM LIST</h4>
+                        <div class="row mb-3">
+                            <div class="col-md-4 mb-2">
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#createitems">
+                                        <i class="bi bi-plus-circle"></i> Add
+                                    </button>
+                                </div>
+                            </div>
 
-                <div class="row mb-3">
-                    <div class="col-md-4 mb-2">
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#createitems">
-                                <i class="bi bi-plus-circle"></i> Add
-                            </button>
+                            <div class="col-md-4 offset-md-4">
+                                <input type="text" id="tableSearch" class="form-control form-control-sm shadow-sm" placeholder="Search item...">
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-md-4 offset-md-4">
-                        <input type="text" id="tableSearch" class="form-control form-control-sm shadow-sm" placeholder="Search item...">
-                    </div>
-                </div>
-
-                <div class="card shadow rounded-4">
-                    <div class="card-body text-dark">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover table-bordered text-center align-middle">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Item Name</th>
-                                        <th>model</th>
-                                        <th>Brand</th>
-                                        <th>Serial Number </th>
-                                        <th>Item Type</th>
-                                        <th>Room Name </th>
-                                        <th>Item Status </th>
-                                        <th>Department</th>
-                                        <th>Date Arrived</th>
-                                        <th>Campus Name</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        @foreach (var item in Model.Item_list.OrderBy(x => x.Item_name))
-                                        {
-                                            <td>@Html.DisplayFor(modelItem => item.ID)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.Item_name)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.Model)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.Brand)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.Serial_number)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.Item_type)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.Room_name)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.Item_status)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.Department)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.Date_now)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.Campus_name)</td>
-                                        }
-
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                            <div class="d-flex justify-content-center mt-3">
-                                <nav>
-                                    <ul class="pagination pagination-sm" id="pagination"></ul>
-                                </nav>
+                        <div class="card shadow rounded-4">
+                            <div class="card-body text-dark">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover table-bordered text-center align-middle" id="itemsTable">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Item Name</th>
+                                                <th>Serial Number</th>
+                                                <th>Room Name</th>
+                                                <th>Date Arrived</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.Item_list.OrderBy(x => x.Item_name))
+                                            {
+                                                <tr class="item-row"
+                                                    data-id="@item.ID"
+                                                    data-name="@item.Item_name"
+                                                    data-model="@item.Model"
+                                                    data-brand="@item.Brand"
+                                                    data-serial="@item.Serial_number"
+                                                    data-type="@item.Item_type"
+                                                    data-room="@item.Room_name"
+                                                    data-status="@item.Item_status"
+                                                    data-department="@item.Department"
+                                                    data-campus="@item.Campus_name"
+                                                    data-date="@item.Date_now">
+                                                    <td>@item.ID</td>
+                                                    <td>@item.Item_name</td>
+                                                    <td>@item.Serial_number</td>
+                                                    <td>@item.Room_name</td>
+                                                    <td>@item.Date_now</td>
+                                                    <td>
+                                                        <button class="btn btn-sm btn-primary open-update-modal"
+                                                                data-bs-toggle="modal" data-bs-target="#updateitems"
+                                                                data-id="@item.ID"
+                                                                data-name="@item.Item_name"
+                                                                data-model="@item.Model"
+                                                                data-brand="@item.Brand"
+                                                                data-serial="@item.Serial_number"
+                                                                data-type="@item.Item_type"
+                                                                data-room="@item.Room_name"
+                                                                data-status="@item.Item_status"
+                                                                data-department="@item.Department"
+                                                                data-campus="@item.Campus_name">
+                                                            <i class="bi bi-pencil-square"></i> Update
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                    <!-- Pagination -->
+                                    <div class="d-flex justify-content-center mt-3">
+                                        <nav>
+                                            <ul class="pagination" id="pagination"></ul>
+                                        </nav>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
-
     </div>
-</div>
 
 
+    <!-- Modal for item details -->
+    @foreach (var item in Model.Item_list)
+    {
+        <div class="modal fade" id="detailsModal_@item.Item_name.Replace(" ", "_")" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="detailsModalLabel">@Html.DisplayFor(modelItem => item.Item_name)</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <strong>MODEL:</strong> @Html.DisplayFor(modelItem => item.Model)<br>
+                        <strong>BRAND:</strong> @Html.DisplayFor(modelItem => item.Brand)<br>
+                        <strong>ITEM TYPE:</strong> @Html.DisplayFor(modelItem => item.Item_type)<br>
+                        <strong>STATUS:</strong> @Html.DisplayFor(modelItem => item.Item_status)<br>
+                        <strong>LOCATION:</strong> @Html.DisplayFor(modelItem => item.Room_name)<br>
+                        <strong>DEPARTMENT:</strong> @Html.DisplayFor(modelItem => item.Department)<br>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary hover-scale" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 
-<!-- Modal for item details -->
-@foreach (var item in Model.Item_list)
-{
-    <div class="modal fade" id="detailsModal_@item.Item_name.Replace(" ", "_")" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+
+    @*ADD ITEMS IN ITEM LIST*@
+    <div class="modal fade add-item-modal" id="createitems" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h2 class="modal-title" id="exampleModalLabel">ADD NEW ITEM</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="add_item_name" name="add_item_name" placeholder=" " autocomplete="off" required />
+                                    <label for="add_item_name" class="form-label">Item Name</label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="add_model" name="add_model" placeholder=" " autocomplete="off" required />
+                                    <label for="add_model" class="form-label">Model</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <div class="form-floating">
+                                    <select class="form-select" id="add_brand" name="add_brand" required>
+                                        <option value="" disabled selected hidden>Choose Brand</option>
+                                        @foreach (var brand in Model.Allbrand)
+                                        {
+                                            <option value="@brand.Brand_name">@brand.Brand_name</option>
+                                        }
+                                    </select>
+                                    <label for="add_brand" class="form-label">Brand</label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="add_serial_number" name="add_serial_number" placeholder=" " autocomplete="off" required />
+                                    <label for="add_serial_number" class="form-label">Serial Number</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <div class="form-floating">
+                                    <select class="form-select" id="add_item_type" name="add_item_type" required>
+                                        <option value="" disabled selected hidden>Choose Item Type</option>
+                                        <option value="COMPONENT">Component</option>
+                                        <option value="EQUIPMENT">Equipment</option>
+                                    </select>
+                                    <label for="add_item_type" class="form-label">Item Type</label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-floating">
+                                    <select class="form-select" id="add_item_status" name="add_item_status">
+                                        <option value="" disabled selected hidden>Choose Status</option>
+                                        <option value="NOT USE">NOT USE</option>
+                                        <option value="USE">USE</option>
+                                        <option value="BROKEN">BROKEN</option>
+                                    </select>
+                                    <label for="add_item_status" class="form-label">Status</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <div class="form-floating">
+                                    <select class="form-select" id="add_item_department" name="add_item_department">
+                                        <option value="" disabled selected hidden>Choose Department</option>
+                                        <option value="H.R.M">H.R.M</option>
+                                        <option value="I.T">I.T</option>
+                                        <option value="EDUCATION">Education</option>
+                                    </select>
+                                    <label for="add_item_department" class="form-label">Department</label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-floating">
+                                    <input type="datetime-local" class="form-control" id="add_date" name="add_date" autocomplete="off" required />
+                                    <label for="add_date" class="form-label">Date Arrive</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <div class="form-floating">
+                                    <select class="form-select" id="add_room" name="add_room" required>
+                                        <option value="" disabled selected hidden>Choose a Room</option>
+                                        @foreach (var item in Model.Room_list)
+                                        {
+                                            <option value="@item.Room_name">@item.Room_name</option>
+                                        }
+                                    </select>
+                                    <label for="add_room" class="form-label">Room Name</label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="add_campus" name="add_campus" value="@ViewBag.campus_name" autocomplete="off" required readonly />
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer fixed-bottom text-center">
+                    <button class="btn btn-primary" id="itemslistbtn">ADD</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">BACK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*UPDATE ITEMS IN ALL ITEMS*@
+
+    <div class="modal fade" id="updateitems" tabindex="-1" aria-labelledby="updateItemsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="detailsModalLabel">@Html.DisplayFor(modelItem => item.Item_name)</h5>
+                    <h5 class="modal-title" id="updateItemsModalLabel">EDIT ITEM IDENTIFICATION</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body text-center">
-                    <strong>MODEL:</strong> @Html.DisplayFor(modelItem => item.Model)<br>
-                    <strong>BRAND:</strong> @Html.DisplayFor(modelItem => item.Brand)<br>
-                    <strong>ITEM TYPE:</strong> @Html.DisplayFor(modelItem => item.Item_type)<br>
-                    <strong>STATUS:</strong> @Html.DisplayFor(modelItem => item.Item_status)<br>
-                    <strong>LOCATION:</strong> @Html.DisplayFor(modelItem => item.Room_name)<br>
-                    <strong>DEPARTMENT:</strong> @Html.DisplayFor(modelItem => item.Department)<br>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="update_item_name" class="form-label fw-bold">ITEM NAME</label>
+                            <input type="text" class="form-control" id="update_item_name" name="update_item_name" autocomplete="off" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="update_model" class="form-label fw-bold">MODEL</label>
+                            <input type="text" class="form-control" id="update_model" name="update_model" autocomplete="off" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="update_brand" class="form-label fw-bold">BRAND</label>
+                            <select class="form-select" id="update_brand" name="update_brand" autocomplete="off">
+                                @foreach (var brand in Model.Allbrand)
+                                {
+                                    <option value="@brand.Brand_name">@brand.Brand_name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="update_serial_number" class="form-label fw-bold">SERIAL NUMBER</label>
+                            <input type="text" class="form-control" id="update_serial_number" name="update_serial_number" autocomplete="off" required readonly />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="update_item_type" class="form-label fw-bold">ITEM TYPE</label>
+                            <select class="form-select" id="update_item_type" name="update_item_type" required>
+                                <option value="COMPONENT">COMPONENT</option>
+                                <option value="EQUIPMENT">EQUIPMENT</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="update_item_status" class="form-label fw-bold">STATUS</label>
+                            <select class="form-select" id="update_item_status" name="update_item_status" required>
+                                <option value="NOT USE">NOT USE</option>
+                                <option value="USE">USE</option>
+                                <option value="BROKEN">BROKEN</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="update_department" class="form-label fw-bold">DEPARTMENT</label>
+                            <select class="form-select" id="update_department" name="update_department" required>
+                                <option value="I.T">I.T</option>
+                                <option value="H.R.M">H.R.M</option>
+                                <option value="EDUCATION">EDUCATION</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <input type="text" class="form-control visually-hidden" id="update_room_name" name="update_room_name" autocomplete="off" required />
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control visually-hidden" id="update_ID" name="update_ID" autocomplete="off" required />
+                        </div>
+                        <div class="form-floating">
+                            <input type="text" class="form-control visually-hidden" id="update_add_campus" name="update_add_campus" value="@ViewBag.campus_name" autocomplete="off" required readonly />
+
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary hover-scale" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-primary" id="updateitem">SAVE</button>
                 </div>
             </div>
         </div>
     </div>
-}
 
-
-@*ADD ITEMS IN ITEM LIST*@
-<div class="modal fade add-item-modal" id="createitems" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header text-center">
-                <h2 class="modal-title" id="exampleModalLabel">ADD NEW ITEM</h2>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="row mb-3">
-                        <div class="col-6">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="add_item_name" name="add_item_name" placeholder=" " autocomplete="off" required />
-                                <label for="add_item_name" class="form-label">Item Name</label>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="add_model" name="add_model" placeholder=" " autocomplete="off" required />
-                                <label for="add_model" class="form-label">Model</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-6">
-                            <div class="form-floating">
-                                <select class="form-select" id="add_brand" name="add_brand" required>
-                                    <option value="" disabled selected hidden>Choose Brand</option>
-                                    @foreach (var brand in Model.Allbrand)
-                                    {
-                                        <option value="@brand.Brand_name">@brand.Brand_name</option>
-                                    }
-                                </select>
-                                <label for="add_brand" class="form-label">Brand</label>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" id="add_serial_number" name="add_serial_number" placeholder=" " autocomplete="off" required />
-                                <label for="add_serial_number" class="form-label">Serial Number</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-6">
-                            <div class="form-floating">
-                                <select class="form-select" id="add_item_type" name="add_item_type" required>
-                                    <option value="" disabled selected hidden>Choose Item Type</option>
-                                    <option value="COMPONENT">Component</option>
-                                    <option value="EQUIPMENT">Equipment</option>
-                                </select>
-                                <label for="add_item_type" class="form-label">Item Type</label>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-floating">
-                                <select class="form-select" id="add_item_status" name="add_item_status">
-                                    <option value="" disabled selected hidden>Choose Status</option>
-                                    <option value="NOT USE">NOT USE</option>
-                                    <option value="USE">USE</option>
-                                    <option value="BROKEN">BROKEN</option>
-                                </select>
-                                <label for="add_item_status" class="form-label">Status</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-6">
-                            <div class="form-floating">
-                                <select class="form-select" id="add_item_department" name="add_item_department">
-                                    <option value="" disabled selected hidden>Choose Department</option>
-                                    <option value="H.R.M">H.R.M</option>
-                                    <option value="I.T">I.T</option>
-                                    <option value="EDUCATION">Education</option>
-                                </select>
-                                <label for="add_item_department" class="form-label">Department</label>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-floating">
-                                <input type="datetime-local" class="form-control" id="add_date" name="add_date" autocomplete="off" required />
-                                <label for="add_date" class="form-label">Date Arrive</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-6">
-                            <div class="form-floating">
-                                <select class="form-select" id="add_room" name="add_room" required>
-                                    <option value="" disabled selected hidden>Choose a Room</option>
-                                    @foreach (var item in Model.Room_list)
-                                    {
-                                        <option value="@item.Room_name">@item.Room_name</option>
-                                    }
-                                </select>
-                                <label for="add_room" class="form-label">Room Name</label>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-floating">
-                                <input type="text" class="form-control visually-hidden" id="add_campus" name="add_campus" value="@ViewBag.campus_name" autocomplete="off" required readonly />
-
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer fixed-bottom text-center">
-                <button class="btn btn-primary" id="itemslistbtn">ADD</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">BACK</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-@*UPDATE ITEMS IN ALL ITEMS*@
-
-<div class="modal fade" id="updateitems" tabindex="-1" aria-labelledby="updateItemsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="updateItemsModalLabel">EDIT ITEM IDENTIFICATION</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label for="update_item_name" class="form-label fw-bold">ITEM NAME</label>
-                        <input type="text" class="form-control" id="update_item_name" name="update_item_name" autocomplete="off" required />
-                    </div>
-                    <div class="col-md-6">
-                        <label for="update_model" class="form-label fw-bold">MODEL</label>
-                        <input type="text" class="form-control" id="update_model" name="update_model" autocomplete="off" required />
-                    </div>
-                    <div class="col-md-6">
-                        <label for="update_brand" class="form-label fw-bold">BRAND</label>
-                        <select class="form-select" id="update_brand" name="update_brand" autocomplete="off">
-                            @foreach (var brand in Model.Allbrand)
-                            {
-                                <option value="@brand.Brand_name">@brand.Brand_name</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="update_serial_number" class="form-label fw-bold">SERIAL NUMBER</label>
-                        <input type="text" class="form-control" id="update_serial_number" name="update_serial_number" autocomplete="off" required readonly />
-                    </div>
-                    <div class="col-md-6">
-                        <label for="update_item_type" class="form-label fw-bold">ITEM TYPE</label>
-                        <select class="form-select" id="update_item_type" name="update_item_type" required>
-                            <option value="COMPONENT">COMPONENT</option>
-                            <option value="EQUIPMENT">EQUIPMENT</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="update_item_status" class="form-label fw-bold">STATUS</label>
-                        <select class="form-select" id="update_item_status" name="update_item_status" required>
-                            <option value="NOT USE">NOT USE</option>
-                            <option value="USE">USE</option>
-                            <option value="BROKEN">BROKEN</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="update_department" class="form-label fw-bold">DEPARTMENT</label>
-                        <select class="form-select" id="update_department" name="update_department" required>
-                            <option value="I.T">I.T</option>
-                            <option value="H.R.M">H.R.M</option>
-                            <option value="EDUCATION">EDUCATION</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-6">
-                        <input type="text" class="form-control visually-hidden" id="update_room_name" name="update_room_name" autocomplete="off" required />
-                    </div>
-                    <div class="col-md-6">
-                        <input type="text" class="form-control visually-hidden" id="update_ID" name="update_ID" autocomplete="off" required />
-                    </div>
-                    <div class="form-floating">
-                        <input type="text" class="form-control visually-hidden" id="update_add_campus" name="update_add_campus" value="@ViewBag.campus_name" autocomplete="off" required readonly />
-
+    <div class="modal fade" id="itemDetailsModal" tabindex="-1" aria-labelledby="itemDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Item Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6"><strong>Item Name:</strong> <span id="detail_name"></span></div>
+                        <div class="col-md-6"><strong>Model:</strong> <span id="detail_model"></span></div>
+                        <div class="col-md-6"><strong>Brand:</strong> <span id="detail_brand"></span></div>
+                        <div class="col-md-6"><strong>Serial Number:</strong> <span id="detail_serial"></span></div>
+                        <div class="col-md-6"><strong>Item Type:</strong> <span id="detail_type"></span></div>
+                        <div class="col-md-6"><strong>Room Name:</strong> <span id="detail_room"></span></div>
+                        <div class="col-md-6"><strong>Status:</strong> <span id="detail_status"></span></div>
+                        <div class="col-md-6"><strong>Department:</strong> <span id="detail_department"></span></div>
+                        <div class="col-md-6"><strong>Campus:</strong> <span id="detail_campus"></span></div>
+                        <div class="col-md-6"><strong>Date Arrived:</strong> <span id="detail_date"></span></div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button class="btn btn-primary" id="updateitem">SAVE</button>
+        </div>
+    </div>
+
+
+
+
+    <!-- Error Modal Dialog -->
+    <div class="modal fade" id="model_error" tabindex="-1" aria-labelledby="model_errorLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="model_errorLabel">Error</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="error_message"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-
-
-
-
-<!-- Error Modal Dialog -->
-<div class="modal fade" id="model_error" tabindex="-1" aria-labelledby="model_errorLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title" id="model_errorLabel">Error</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p id="error_message"></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <!-- Success Modal Dialog -->
+    <div class="modal fade" id="model_success" tabindex="-1" aria-labelledby="model_successLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="model_successLabel">Success</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="success_message"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Success Modal Dialog -->
-<div class="modal fade" id="model_success" tabindex="-1" aria-labelledby="model_successLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content">
-            <div class="modal-header bg-success text-white">
-                <h5 class="modal-title" id="model_successLabel">Success</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p id="success_message"></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+    <script src="~/JS Scripts/Itemlist.js"></script>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-
-<script>
-    $(document).ready(function () {
-        $("#addcampus").click(function () {
-            $("#error_message").text("");
-            var add_campus = $("#add_campus").val();
-            if (add_campus === '') {
-                showErrorMessage("Please supply a Campus Name.");
-                return;
-            }
-            var addcampusdata = {
-                add_campus: add_campus
-            };
-
-            $.ajax({
-                type: "POST",
-                url: "/Inventory/AddCampus",
-                data: addcampusdata,
-                success: function (response) {
-
-                    if (response.indexOf("Successfully added campus") !== -1) {
-                        showSuccessMessage(response);
-                    } else {
-                        showErrorMessage(response);
-                    }
-                },
-                error: function () {
-                    showErrorMessage("An error occurred while adding the Campus item");
-                },
+    <script>
+        $(document).ready(function () {
+            $(".open-update-modal").click(function () {
+                $("#update_ID").val($(this).data("id"));
+                $("#update_item_name").val($(this).data("name"));
+                $("#update_model").val($(this).data("model"));
+                $("#update_brand").val($(this).data("brand"));
+                $("#update_serial_number").val($(this).data("serial"));
+                $("#update_item_type").val($(this).data("type"));
+                $("#update_item_status").val($(this).data("status"));
+                $("#update_department").val($(this).data("department"));
+                $("#update_room_name").val($(this).data("room"));
+                $("#update_add_campus").val($(this).data("campus"));
             });
         });
+    </script>
 
-        function showErrorMessage(message) {
-            $("#error_message").text(message);
-            $("#model_error").modal("show");
-        }
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            $("#itemsTable").on("click", ".item-row", function (e) {
+                // Ignore click if it was on the update button
+                if ($(e.target).closest(".open-update-modal").length) return;
 
-        function showSuccessMessage(response) {
+                const row = $(this).data();
 
-            var successMessage = "Successfully added campus";
-            if (response.indexOf(successMessage) !== -1) {
-                $("#success_message").text(successMessage);
-                $("#model_success").modal("show");
+                $("#detail_name").text(row.name);
+                $("#detail_model").text(row.model);
+                $("#detail_brand").text(row.brand);
+                $("#detail_serial").text(row.serial);
+                $("#detail_type").text(row.type);
+                $("#detail_room").text(row.room);
+                $("#detail_status").text(row.status);
+                $("#detail_department").text(row.department);
+                $("#detail_campus").text(row.campus);
+                $("#detail_date").text(row.date);
 
-
-                setTimeout(function () {
-                    window.location.href = "/Inventory/Campus";
-                }, 2000);
-            } else {
-
-                showErrorMessage("Unexpected response: " + response);
-            }
-        }
-    });
-
-
-</script>
-
-<script>
-    $(document).ready(function () {
-        $("#itemslistbtn").click(function () {
-            $("#error_message").text("");
-            var add_item_name = $("#add_item_name").val();
-            if (add_item_name === '') {
-                showErrorMessage("Please supply an ITEM NAME.");
-                return;
-            }
-
-            var add_model = $("#add_model").val();
-            if (add_model === '') {
-                showErrorMessage("Please supply an ITEM MODEL.");
-                return;
-            }
-
-            var add_brand = $("#add_brand").val();
-            if (add_brand === null || add_brand === '') {
-                showErrorMessage("Please choose a valid ITEM BRAND.");
-                return;
-            }
-
-            var add_serial_number = $("#add_serial_number").val();
-            if (add_serial_number === '') {
-                showErrorMessage("Please supply an ITEM SERIAL NUMBER.");
-                return;
-            }
-
-            var add_item_type = $("#add_item_type").val();
-            if (add_item_type === null || add_item_type === '') {
-                showErrorMessage("Please choose a valid ITEM TYPE.");
-                return;
-            }
-
-            var add_item_status = $("#add_item_status").val();
-            if (add_item_status === null || add_item_status === '') {
-                showErrorMessage("Please choose a valid ITEM STATUS.");
-                return;
-            }
-
-            var add_item_department = $("#add_item_department").val();
-            if (add_item_department === null || add_item_department === '') {
-                showErrorMessage("Please choose a valid ITEM DEPARTMENT.");
-                return;
-            }
-
-            var add_date = $("#add_date").val();
-            if (add_date === '') {
-                showErrorMessage("Please choose a valid DATE.");
-                return;
-            }
-
-            var add_room = $("#add_room").val();
-            if (add_room === null || add_room === '') {
-                showErrorMessage("Please choose a valid ROOM NAME.");
-                return;
-            }
-
-            var add_campus = $("#add_campus").val();
-            if (add_campus === '') {
-                showErrorMessage("Please supply a CAMPUS NAME.");
-                return;
-            }
-            var itemslistdata = {
-                add_item_name: add_item_name,
-                add_model: add_model,
-                add_brand: add_brand,
-                add_serial_number: add_serial_number,
-                add_item_type: add_item_type,
-                add_item_status: add_item_status,
-                add_item_department: add_item_department,
-                add_date: add_date,
-                add_room: add_room,
-                add_campus: add_campus
-            };
-
-            $.ajax({
-                type: "POST",
-                url: "/Inventory/createitems",
-                data: itemslistdata,
-                success: function (response) {
-                    if (response.indexOf("Successfully added item") !== -1) {
-                        showSuccessMessage(response);
-                    } else {
-                        showErrorMessage(response);
-                    }
-                },
-                error: function () {
-                    showErrorMessage("An error occurred while adding the Room item");
-                },
+                $("#itemDetailsModal").modal("show");
             });
         });
+    </script>
 
-        function showErrorMessage(message) {
-            $("#error_message").text(message);
-            $("#model_error").modal("show");
-        }
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            $(".table-row").click(function (e) {
+                // Ignore clicks on the update button itself
+                if ($(e.target).closest(".open-update-modal").length > 0) return;
 
+                var row = $(this).data();
 
-        function showSuccessMessage(response) {
+                $("#update_ID").val(row.id);
+                $("#update_item_name").val(row.name);
+                $("#update_model").val(row.model);
+                $("#update_brand").val(row.brand);
+                $("#update_serial_number").val(row.serial);
+                $("#update_item_type").val(row.type);
+                $("#update_room_name").val(row.room);
+                $("#update_item_status").val(row.status);
+                $("#update_department").val(row.department);
+                $("#update_add_campus").val(row.campus);
 
-            var successMessage = "Successfully added item";
-            if (response.indexOf(successMessage) !== -1) {
-                $("#success_message").text(successMessage);
-                $("#model_success").modal("show");
-
-
-                setTimeout(function () {
-                    location.reload();
-                }, 1000);
-            } else {
-
-                showErrorMessage("Unexpected response: " + response);
-            }
-        }
-    });
-
-
-</script>
-
-
-
-
-
-
-
-
-<script>
-    $(document).ready(function () {
-        $("#updateitem").click(function () {
-            $("#error_message").text("");
-            var update_item_name = $("#update_item_name").val();
-            if (update_item_name === '') {
-                showErrorMessage("Please supply an ITEM NAME.");
-                return;
-            }
-
-            var update_model = $("#update_model").val();
-            if (update_model === '') {
-                showErrorMessage("Please supply an ITEM MODEL.");
-                return;
-            }
-
-            var update_brand = $("#update_brand").val();
-            if (update_brand === null || update_brand === '') {
-                showErrorMessage("Please choose a valid ITEM BRAND.");
-                return;
-            }
-
-            var update_serial_number = $("#update_serial_number").val();
-            if (update_serial_number === '') {
-                showErrorMessage("Please supply an ITEM SERIAL NUMBER.");
-                return;
-            }
-
-            var update_item_type = $("#update_item_type").val();
-            if (update_item_type === null || update_item_type === '') {
-                showErrorMessage("Please choose a valid ITEM TYPE.");
-                return;
-            }
-
-            var update_room_name = $("#update_room_name").val();
-            if (update_room_name === null || update_room_name === '') {
-                showErrorMessage("Please choose a valid ROOM NAME.");
-                return;
-            }
-
-            var update_item_status = $("#update_item_status").val();
-            if (update_item_status === null || update_item_status === '') {
-                showErrorMessage("Please choose a valid ITEM STATUS.");
-                return;
-            }
-
-            var update_department = $("#update_department").val();
-            if (update_department === null || update_department === '') {
-                showErrorMessage("Please choose a valid ITEM DEPARTMENT.");
-                return;
-            }
-            var update_ID = $("#update_ID").val();
-            if (update_ID === null || update_ID === '') {
-                showErrorMessage("No ID.");
-                return;
-            }
-
-            var update_add_campus = $("#update_add_campus").val();
-            if (update_add_campus === null || update_add_campus === '') {
-                showErrorMessage("Please choose a valid Campus_name.");
-                return;
-            }
-
-
-            var updaitemdata = {
-                update_item_name: update_item_name,
-                update_model: update_model,
-                update_brand: update_brand,
-                update_serial_number: update_serial_number,
-                update_item_type: update_item_type,
-                update_room_name: update_room_name,
-                update_item_status: update_item_status,
-                update_department: update_department,
-                update_ID: update_ID,
-                update_add_campus: update_add_campus
-            };
-            $.ajax({
-                type: "POST",
-                url: "/Inventory/UpdateItems",
-                data: updaitemdata,
-                success: function (response) {
-                    if (response.indexOf("Successfully updated item") !== -1) {
-                        showSuccessMessage(response);
-                    } else {
-                        showErrorMessage(response);
-                    }
-                },
-                error: function (error) {
-                    console.error(error);
-                    showErrorMessage("An error occurred while updating the item.");
-                },
+                $("#updateitems").modal("show");
             });
         });
+    </script>
 
-        function showErrorMessage(message) {
-            $("#error_message").text(message);
-            $("#model_error").modal("show");
-        }
+    <script>
+        $(document).ready(function () {
+            $("#itemslistbtn").click(function () {
+                $("#error_message").text("");
+                var add_item_name = $("#add_item_name").val();
+                if (add_item_name === '') {
+                    showErrorMessage("Please supply an ITEM NAME.");
+                    return;
+                }
 
+                var add_model = $("#add_model").val();
+                if (add_model === '') {
+                    showErrorMessage("Please supply an ITEM MODEL.");
+                    return;
+                }
 
-        function showSuccessMessage(response) {
+                var add_brand = $("#add_brand").val();
+                if (add_brand === null || add_brand === '') {
+                    showErrorMessage("Please choose a valid ITEM BRAND.");
+                    return;
+                }
 
-            var successMessage = "Successfully Update item";
-            if (response.indexOf(successMessage) !== -1) {
-                $("#success_message").text(successMessage);
-                $("#model_success").modal("show");
+                var add_serial_number = $("#add_serial_number").val();
+                if (add_serial_number === '') {
+                    showErrorMessage("Please supply an ITEM SERIAL NUMBER.");
+                    return;
+                }
 
+                var add_item_type = $("#add_item_type").val();
+                if (add_item_type === null || add_item_type === '') {
+                    showErrorMessage("Please choose a valid ITEM TYPE.");
+                    return;
+                }
 
-                setTimeout(function () {
-                    location.reload();
-                }, 1000);
-            } else {
+                var add_item_status = $("#add_item_status").val();
+                if (add_item_status === null || add_item_status === '') {
+                    showErrorMessage("Please choose a valid ITEM STATUS.");
+                    return;
+                }
 
-                showErrorMessage("Unexpected response: " + response);
+                var add_item_department = $("#add_item_department").val();
+                if (add_item_department === null || add_item_department === '') {
+                    showErrorMessage("Please choose a valid ITEM DEPARTMENT.");
+                    return;
+                }
+
+                var add_date = $("#add_date").val();
+                if (add_date === '') {
+                    showErrorMessage("Please choose a valid DATE.");
+                    return;
+                }
+
+                var add_room = $("#add_room").val();
+                if (add_room === null || add_room === '') {
+                    showErrorMessage("Please choose a valid ROOM NAME.");
+                    return;
+                }
+
+                var add_campus = $("#add_campus").val();
+                if (add_campus === '') {
+                    showErrorMessage("Please supply a CAMPUS NAME.");
+                    return;
+                }
+                var itemslistdata = {
+                    add_item_name: add_item_name,
+                    add_model: add_model,
+                    add_brand: add_brand,
+                    add_serial_number: add_serial_number,
+                    add_item_type: add_item_type,
+                    add_item_status: add_item_status,
+                    add_item_department: add_item_department,
+                    add_date: add_date,
+                    add_room: add_room,
+                    add_campus: add_campus
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Inventory/createitems",
+                    data: itemslistdata,
+                    success: function (response) {
+                        if (response.indexOf("Successfully added item") !== -1) {
+                            showSuccessMessage(response);
+                        } else {
+                            showErrorMessage(response);
+                        }
+                    },
+                    error: function () {
+                        showErrorMessage("An error occurred while adding the Room item");
+                    },
+                });
+            });
+
+            function showErrorMessage(message) {
+                $("#error_message").text(message);
+                $("#model_error").modal("show");
             }
-        }
-    });
 
 
-</script>
+            function showSuccessMessage(response) {
+
+                var successMessage = "Successfully added item";
+                if (response.indexOf(successMessage) !== -1) {
+                    $("#success_message").text(successMessage);
+                    $("#model_success").modal("show");
 
 
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
+                } else {
 
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // ... (your existing script for clickable rows)
-    });
-
-    function setUpdateFields(Item_name, Model, Brand, Serial_number, Item_type, Item_status, Room_name, Department, ID) {
-        document.getElementById('update_item_name').value = Item_name;
-        document.getElementById('update_model').value = Model;
-        document.getElementById('update_brand').value = Brand;
-        document.getElementById('update_serial_number').value = Serial_number;
-        document.getElementById('update_item_type').value = Item_type;
-        document.getElementById('update_item_status').value = Item_status;
-        document.getElementById('update_room_name').value = Room_name;
-        document.getElementById('update_department').value = Department;
-        document.getElementById('update_ID').value = ID;
-    }
-</script>
-
-<script>
-    function setUpdatestock(uniform_id) {
-        document.getElementById('add_uniform_id').value = uniform_id;
-    }
-</script>
-
-
-
-<script>
-    function searchTable() {
-        var input, filter, table, tr, td, i, txtValue;
-        input = document.getElementById("tableSearch");
-        filter = input.value.toUpperCase();
-        table = document.querySelector(".table-striped");
-        tr = table.getElementsByTagName("tr");
-
-        for (i = 1; i < tr.length; i++) {  // Start loop from index 1 to exclude header
-            td = tr[i].getElementsByTagName("td");
-            for (var j = 0; j < td.length; j++) {
-                if (td[j]) {
-                    txtValue = td[j].innerText || td[j].textContent;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
-                        break;
-                    } else {
-                        tr[i].style.display = "none";
-                    }
+                    showErrorMessage("Unexpected response: " + response);
                 }
             }
-        }
-    }
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#updateitem").click(function () {
+                $("#error_message").text("");
+                var update_item_name = $("#update_item_name").val();
+                if (update_item_name === '') {
+                    showErrorMessage("Please supply an ITEM NAME.");
+                    return;
+                }
 
-    document.getElementById("tableSearch").addEventListener("keyup", searchTable);
-</script>
+                var update_model = $("#update_model").val();
+                if (update_model === '') {
+                    showErrorMessage("Please supply an ITEM MODEL.");
+                    return;
+                }
 
-<script>
-    $(document).ready(function () {
-        var rowsPerPage = 10;
-        var rows = $('table tbody tr');
-        var pagination = $('#pagination');
-        var rowsCount = rows.length;
-        var pageCount = Math.ceil(rowsCount / rowsPerPage);
+                var update_brand = $("#update_brand").val();
+                if (update_brand === null || update_brand === '') {
+                    showErrorMessage("Please choose a valid ITEM BRAND.");
+                    return;
+                }
 
-        function displayRows(page) {
-            rows.hide();
-            var start = page * rowsPerPage;
-            rows.slice(start, start + rowsPerPage).show();
-        }
+                var update_serial_number = $("#update_serial_number").val();
+                if (update_serial_number === '') {
+                    showErrorMessage("Please supply an ITEM SERIAL NUMBER.");
+                    return;
+                }
 
-        function setupPagination() {
-            pagination.empty();
-            for (var i = 0; i < pageCount; i++) {
-                pagination.append(
-                    `<li class="page-item"><a class="page-link" href="#">${i + 1}</a></li>`
-                );
+                var update_item_type = $("#update_item_type").val();
+                if (update_item_type === null || update_item_type === '') {
+                    showErrorMessage("Please choose a valid ITEM TYPE.");
+                    return;
+                }
+
+                var update_room_name = $("#update_room_name").val();
+                if (update_room_name === null || update_room_name === '') {
+                    showErrorMessage("Please choose a valid ROOM NAME.");
+                    return;
+                }
+
+                var update_item_status = $("#update_item_status").val();
+                if (update_item_status === null || update_item_status === '') {
+                    showErrorMessage("Please choose a valid ITEM STATUS.");
+                    return;
+                }
+
+                var update_department = $("#update_department").val();
+                if (update_department === null || update_department === '') {
+                    showErrorMessage("Please choose a valid ITEM DEPARTMENT.");
+                    return;
+                }
+                var update_ID = $("#update_ID").val();
+                if (update_ID === null || update_ID === '') {
+                    showErrorMessage("No ID.");
+                    return;
+                }
+
+                var update_add_campus = $("#update_add_campus").val();
+                if (update_add_campus === null || update_add_campus === '') {
+                    showErrorMessage("Please choose a valid Campus_name.");
+                    return;
+                }
+
+
+                var updaitemdata = {
+                    update_item_name: update_item_name,
+                    update_model: update_model,
+                    update_brand: update_brand,
+                    update_serial_number: update_serial_number,
+                    update_item_type: update_item_type,
+                    update_room_name: update_room_name,
+                    update_item_status: update_item_status,
+                    update_department: update_department,
+                    update_ID: update_ID,
+                    update_add_campus: update_add_campus
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "/Inventory/UpdateItems",
+                    data: updaitemdata,
+                    success: function (response) {
+                        if (response.indexOf("Successfully updated item") !== -1) {
+                            showSuccessMessage(response);
+                        } else {
+                            showErrorMessage(response);
+                        }
+                    },
+                    error: function (error) {
+                        console.error(error);
+                        showErrorMessage("An error occurred while updating the item.");
+                    },
+                });
+            });
+
+            function showErrorMessage(message) {
+                $("#error_message").text(message);
+                $("#model_error").modal("show");
             }
-            pagination.find('li:first').addClass('active');
-        }
 
-        setupPagination();
-        displayRows(0);
 
-        pagination.on('click', 'li', function (e) {
-            e.preventDefault();
-            var index = $(this).index();
-            pagination.find('li').removeClass('active');
-            $(this).addClass('active');
-            displayRows(index);
+            function showSuccessMessage(response) {
+
+                var successMessage = "Successfully Update item";
+                if (response.indexOf(successMessage) !== -1) {
+                    $("#success_message").text(successMessage);
+                    $("#model_success").modal("show");
+
+
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
+                } else {
+
+                    showErrorMessage("Unexpected response: " + response);
+                }
+            }
         });
 
-        // Click row redirect
-        $('.clickable-row').click(function () {
-            window.location = $(this).data('href');
+        document.addEventListener("DOMContentLoaded", function () {
+            // ... (your existing script for clickable rows)
         });
-    });
-</script>
+    </script>
+
+    <!-- Right before the closing body tag -->
+    <script>
+        $(document).ready(function () {
+            var rowsPerPage = 10;
+            var rows = $('#itemsTable tbody tr'); // safer, more specific
+            var pagination = $('#pagination');
+            var rowsCount = rows.length;
+            var pageCount = Math.ceil(rowsCount / rowsPerPage);
+
+            function displayRows(page) {
+                rows.hide();
+                var start = page * rowsPerPage;
+                rows.slice(start, start + rowsPerPage).show();
+            }
+
+            function setupPagination() {
+                pagination.empty();
+                for (var i = 0; i < pageCount; i++) {
+                    pagination.append(
+                        `<li class="page-item"><a class="page-link" href="#">${i + 1}</a></li>`
+                    );
+                }
+                pagination.find('li:first').addClass('active');
+            }
+
+            setupPagination();
+            displayRows(0);
+
+            pagination.on('click', 'li', function (e) {
+                e.preventDefault();
+                var index = $(this).index();
+                pagination.find('li').removeClass('active');
+                $(this).addClass('active');
+                displayRows(index);
+            });
+
+        });
+    </script>
+
+    <script>$(document).ready(function () {
+            var rowsPerPage = 10;
+            var rows = $('table tbody tr');
+            var pagination = $('#pagination');
+            var rowsCount = rows.length;
+            var pageCount = Math.ceil(rowsCount / rowsPerPage);
+
+            function displayRows(page) {
+                rows.hide();
+                var start = page * rowsPerPage;
+                rows.slice(start, start + rowsPerPage).show();
+            }
+
+            function setupPagination() {
+                pagination.empty();
+                for (var i = 0; i < pageCount; i++) {
+                    pagination.append(
+                        `<li class="page-item"><a class="page-link" href="#">${i + 1}</a></li>`
+                    );
+                }
+                pagination.find('li:first').addClass('active');
+            }
+
+            setupPagination();
+            displayRows(0);
+
+            pagination.on('click', 'li', function (e) {
+                e.preventDefault();
+                var index = $(this).index();
+                pagination.find('li').removeClass('active');
+                $(this).addClass('active');
+                displayRows(index);
+            });
+
+            // Click row redirect
+            $('.clickable-row').click(function () {
+                window.location = $(this).data('href');
+            });
+        });
+    </script>
+    
+</body>
+</html>
+
